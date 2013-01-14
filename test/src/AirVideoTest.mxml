@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" applicationDPI="160"
+			   addedToStage="onAddedToStage(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.freshplanet.ane.AirVideo.AirVideo;
+			
+			private var _videoList:Array;
+			
+			protected function get videoList() : Array
+			{
+				if (_videoList == null)
+				{
+					var listFile:File = File.applicationDirectory.resolvePath("videos.txt");
+					var listStream:FileStream = new FileStream();
+					listStream.open(listFile, FileMode.READ);
+					var list:String = listStream.readUTFBytes(listStream.bytesAvailable);
+					_videoList = list.split("\n");
+				}
+				
+				return _videoList; 
+			}
+			
+			protected function onAddedToStage(event:Event):void
+			{
+				AirVideo.getInstance().addEventListener(AirVideo.CURRENT_VIDEO_CHANGED, onCurrentVideoChanged, false, 0, true);
+				
+				for each (var video:String in videoList)
+				{
+					AirVideo.getInstance().addVideoToQueue(video);
+				}
+				
+				AirVideo.getInstance().showPlayer();
+			}
+			
+			protected function onCurrentVideoChanged(event:Event):void
+			{
+				trace("Current video: " + AirVideo.getInstance().currentVideo + " - " + AirVideo.getInstance().queue.length + " videos in queue");
+				
+				if (AirVideo.getInstance().currentVideo == null)
+				{
+					AirVideo.getInstance().hidePlayer();
+				}
+			}
+		]]>
+	</fx:Script>
+</s:Application>

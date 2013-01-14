@@ -1,0 +1,257 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5A98569C15213BC3003A8EB0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A98569B15213BC3003A8EB0 /* Foundation.framework */; };
+		FA8DA7FE16A46CB200CE1D10 /* AirVideo-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = FA8DA7FB16A46CB200CE1D10 /* AirVideo-Prefix.pch */; };
+		FA8DA7FF16A46CB200CE1D10 /* AirVideo.h in Headers */ = {isa = PBXBuildFile; fileRef = FA8DA7FC16A46CB200CE1D10 /* AirVideo.h */; };
+		FA8DA80016A46CB200CE1D10 /* AirVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8DA7FD16A46CB200CE1D10 /* AirVideo.m */; };
+		FA8DA80216A46CD000CE1D10 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA8DA80116A46CD000CE1D10 /* UIKit.framework */; };
+		FA8DA80416A46CD600CE1D10 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA8DA80316A46CD600CE1D10 /* MediaPlayer.framework */; };
+		FA8DA80716A46D4500CE1D10 /* FlashRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = FA8DA80616A46D4500CE1D10 /* FlashRuntimeExtensions.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		5A98569815213BC3003A8EB0 /* libAirVideo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAirVideo.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A98569B15213BC3003A8EB0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		FA8DA7FB16A46CB200CE1D10 /* AirVideo-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AirVideo-Prefix.pch"; sourceTree = "<group>"; };
+		FA8DA7FC16A46CB200CE1D10 /* AirVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirVideo.h; sourceTree = "<group>"; };
+		FA8DA7FD16A46CB200CE1D10 /* AirVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirVideo.m; sourceTree = "<group>"; };
+		FA8DA80116A46CD000CE1D10 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		FA8DA80316A46CD600CE1D10 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		FA8DA80616A46D4500CE1D10 /* FlashRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlashRuntimeExtensions.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5A98569515213BC3003A8EB0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA8DA80416A46CD600CE1D10 /* MediaPlayer.framework in Frameworks */,
+				FA8DA80216A46CD000CE1D10 /* UIKit.framework in Frameworks */,
+				5A98569C15213BC3003A8EB0 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5A98568D15213BC2003A8EB0 = {
+			isa = PBXGroup;
+			children = (
+				FA8DA7FA16A46CB200CE1D10 /* AirVideo */,
+				5A98569A15213BC3003A8EB0 /* Frameworks */,
+				5A98569915213BC3003A8EB0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5A98569915213BC3003A8EB0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5A98569815213BC3003A8EB0 /* libAirVideo.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5A98569A15213BC3003A8EB0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5A98569B15213BC3003A8EB0 /* Foundation.framework */,
+				FA8DA80316A46CD600CE1D10 /* MediaPlayer.framework */,
+				FA8DA80116A46CD000CE1D10 /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FA8DA7FA16A46CB200CE1D10 /* AirVideo */ = {
+			isa = PBXGroup;
+			children = (
+				FA8DA7FC16A46CB200CE1D10 /* AirVideo.h */,
+				FA8DA7FD16A46CB200CE1D10 /* AirVideo.m */,
+				FA8DA80516A46CFF00CE1D10 /* Supporting Files */,
+			);
+			path = AirVideo;
+			sourceTree = "<group>";
+		};
+		FA8DA80516A46CFF00CE1D10 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FA8DA7FB16A46CB200CE1D10 /* AirVideo-Prefix.pch */,
+				FA8DA80616A46D4500CE1D10 /* FlashRuntimeExtensions.h */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		5A98569615213BC3003A8EB0 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA8DA7FE16A46CB200CE1D10 /* AirVideo-Prefix.pch in Headers */,
+				FA8DA7FF16A46CB200CE1D10 /* AirVideo.h in Headers */,
+				FA8DA80716A46D4500CE1D10 /* FlashRuntimeExtensions.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		5A98569715213BC3003A8EB0 /* AirVideo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A9856A515213BC3003A8EB0 /* Build configuration list for PBXNativeTarget "AirVideo" */;
+			buildPhases = (
+				5A98569415213BC3003A8EB0 /* Sources */,
+				5A98569515213BC3003A8EB0 /* Frameworks */,
+				5A98569615213BC3003A8EB0 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AirVideo;
+			productName = AirFacebook;
+			productReference = 5A98569815213BC3003A8EB0 /* libAirVideo.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5A98568F15213BC2003A8EB0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+			};
+			buildConfigurationList = 5A98569215213BC2003A8EB0 /* Build configuration list for PBXProject "AirVideo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 5A98568D15213BC2003A8EB0;
+			productRefGroup = 5A98569915213BC3003A8EB0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5A98569715213BC3003A8EB0 /* AirVideo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5A98569415213BC3003A8EB0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA8DA80016A46CB200CE1D10 /* AirVideo.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		5A9856A315213BC3003A8EB0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		5A9856A415213BC3003A8EB0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5A9856A615213BC3003A8EB0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/AirVideo.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AirVideo/AirVideo-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INFOPLIST_FILE = "";
+				INSTALL_PATH = ../;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = AirVideo;
+				SKIP_INSTALL = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5A9856A715213BC3003A8EB0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/AirVideo.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AirVideo/AirVideo-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INSTALL_PATH = ../;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = AirVideo;
+				SKIP_INSTALL = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5A98569215213BC2003A8EB0 /* Build configuration list for PBXProject "AirVideo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A9856A315213BC3003A8EB0 /* Debug */,
+				5A9856A415213BC3003A8EB0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5A9856A515213BC3003A8EB0 /* Build configuration list for PBXNativeTarget "AirVideo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A9856A615213BC3003A8EB0 /* Debug */,
+				5A9856A715213BC3003A8EB0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5A98568F15213BC2003A8EB0 /* Project object */;
+}

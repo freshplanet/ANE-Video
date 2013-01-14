@@ -5,6 +5,7 @@ build.config
 # Flash Builder
 actionscript/bin
 .actionScriptProperties
+.flexProperties
 .flexLibProperties
 
 # Eclipse
@@ -27,3 +28,8 @@ xcuserdata
 Icon
 Thumbs.db
 .DS_Store
+
+# Test application
+test/bin-debug
+test/xcode-launcher
+videos.txt

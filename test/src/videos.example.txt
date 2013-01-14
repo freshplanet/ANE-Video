@@ -1,0 +1,1 @@
+In order for the test application to work, rename this file to "videos.txt" and replace its content by a list of video URLs, one URL per line.
