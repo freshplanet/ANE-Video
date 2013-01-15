@@ -23,6 +23,7 @@ FREContext AirVideoCtx = nil;
 
 @interface AirVideo ()
 
+- (void)playerLoadStateDidChange:(NSNotification *)notification;
 - (void)playerPlaybackDidFinish:(NSNotification *)notification;
 
 @end
@@ -72,14 +73,8 @@ static AirVideo *sharedInstance = nil;
         // Initializer movie player
         _player = [[MPMoviePlayerController alloc] init];
         
-        // Resize player depending on device
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) _player.view.frame = CGRectMake(0, 0, 768, 500);
-        else _player.view.frame = CGRectMake(0, 0, 320, 200);
-        
-        // Center the player on the root view
-        _player.view.center = [[[[[UIApplication sharedApplication] keyWindow] rootViewController] view] center];
-        
-        // Register for playback notifications
+        // Register for notifications
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerLoadStateDidChange:) name:MPMoviePlayerLoadStateDidChangeNotification object:_player];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerPlaybackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:_player];
     }
     
@@ -97,6 +92,24 @@ static AirVideo *sharedInstance = nil;
 + (void)log:(NSString *)message
 {
     [AirVideo dispatchEvent:@"LOGGING" withInfo:message];
+}
+
+- (void)playerLoadStateDidChange:(NSNotification *)notification
+{
+    if (self.player.loadState == MPMovieLoadStatePlayable)
+    {
+        UIView *rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
+        
+        // Resize player
+        CGSize movieSize = self.player.naturalSize;
+        CGRect playerFrame = self.player.view.frame;
+        playerFrame.size.width = MIN(rootView.frame.size.width, movieSize.width);
+        playerFrame.size.height = playerFrame.size.width * movieSize.height / movieSize.width;
+        self.player.view.frame = playerFrame;
+        
+        // Center player
+        self.player.view.center = rootView.center;
+    }
 }
 
 - (void)playerPlaybackDidFinish:(NSNotification *)notification

@@ -25,6 +25,8 @@
 			
 			protected function onAddedToStage(event:Event):void
 			{
+				AirVideo.getInstance().logEnabled = true;
+				
 				AirVideo.getInstance().addEventListener(AirVideo.CURRENT_VIDEO_CHANGED, onCurrentVideoChanged, false, 0, true);
 				
 				for each (var video:String in videoList)

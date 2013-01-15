@@ -29,12 +29,11 @@
     </platform>
  
    <platform name="Android-ARM"> 
-      <applicationDeployment/>
-        <!-- <applicationDeployment> 
+        <applicationDeployment> 
             <nativeLibrary>libAirVideo.jar</nativeLibrary> 
-            <initializer>com.freshplanet.video.Extension</initializer> 
-            <finalizer>com.freshplanet.video.Extension</finalizer> 
-        </applicationDeployment>  -->
+            <initializer>com.freshplanet.ane.AirVideo.Extension</initializer> 
+            <finalizer>com.freshplanet.ane.AirVideo.Extension</finalizer> 
+        </applicationDeployment>
     </platform>
     
     <platform name="default"> 
