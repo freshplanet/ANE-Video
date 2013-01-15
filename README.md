@@ -13,7 +13,7 @@ The ANE binary (AirVideo.ane) is located in the *bin* folder. You should add it 
 Usage
 ---------
 
-Currently, this ANE can only play video files from URLs. You can find the Actionscript documentation in *actionscript/src/com/freshplanet/ane/AirVideo/AirVideo.as* and an example code in *test/src/AirVideoTest.mxml*.
+Currently, this ANE can only play video files from URLs. You can find the Actionscript documentation in [AirVideo.as](https://github.com/freshplanet/ANE-Video/blob/master/actionscript/src/com/freshplanet/ane/AirVideo/AirVideo.as) and an example code in [AirVideoTest.mxml](https://github.com/freshplanet/ANE-Video/blob/master/test/src/AirVideoTest.mxml).
 
 
 Build script
