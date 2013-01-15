@@ -14,6 +14,7 @@ package com.freshplanet.ane.AirVideo
 		// 																						 //
 		// --------------------------------------------------------------------------------------//
 		
+		/** Event dispatched each time the currently played video changes. */
 		public static const CURRENT_VIDEO_CHANGED : String = "CURRENT_VIDEO_CHANGED";
 		
 		/** AirVideo is supported on iOS and Android devices. */
@@ -63,6 +64,7 @@ package com.freshplanet.ane.AirVideo
 			_logEnabled = value;
 		}
 		
+		/** Add the video player to the display list, at the center of the stage. */
 		public function showPlayer() : void
 		{
 			if (!isSupported) return;
@@ -70,6 +72,7 @@ package com.freshplanet.ane.AirVideo
 			_context.call("showPlayer");
 		}
 		
+		/** Remove the video player from the display list. */
 		public function hidePlayer() : void
 		{
 			if (!isSupported) return;
@@ -77,11 +80,18 @@ package com.freshplanet.ane.AirVideo
 			_context.call("hidePlayer");
 		}
 		
+		/** Return the URL of the video being played currently, or <code>null</code> nothing is playing. */
 		public function get currentVideo() : String
 		{
 			return _currentVideo ? _currentVideo.concat() : null;
 		}
 		
+		/**
+		 * Load and play a given video URL.<br><br>
+		 * 
+		 * If another video is currently being played, it will stop. If there are videos in the queue,
+		 * they will remain in the queue to be played after this new video is played.
+		 */
 		public function loadVideo( url : String ) : void
 		{
 			if (!isSupported) return;
@@ -90,22 +100,33 @@ package com.freshplanet.ane.AirVideo
 			setCurrentVideo(url);
 		}
 		
+		/**
+		 * Return an array containing the URLs of the videos currently in the queue. The video currently
+		 * played is not part of the queue.
+		 */
 		public function get queue() : Array
 		{
 			return _queue.concat();
 		}
 		
+		/**
+		 * Append a video URL to the queue.<br><br>
+		 * 
+		 * If no video is currently played, and the queue is empty, the video is loaded and played directly.
+		 */
 		public function addVideoToQueue( url : String ) : void
 		{
-			if (_currentVideo == null) loadVideo(url);
+			if (_currentVideo == null && _queue.length == 0) loadVideo(url);
 			else _queue.push(url);
 		}
 		
+		/** Remove all videos from the queue. This doesn't stop the video being played currently, if any. */
 		public function clearQueue() : void
 		{
 			_queue.splice(0);
 		}
 		
+		/** Stop the video being played currently, if any, and start the first video in the queue, if any. */
 		public function next() : void
 		{
 			if (_queue.length > 0)
