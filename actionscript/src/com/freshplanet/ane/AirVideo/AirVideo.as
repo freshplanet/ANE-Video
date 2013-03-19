@@ -96,7 +96,7 @@ package com.freshplanet.ane.AirVideo
 		{
 			if (!isSupported) return;
 			
-			_context.call("loadVideo", url);
+			_context.call("fetchVideo", url);
 			setCurrentVideo(url);
 		}
 		
@@ -139,6 +139,28 @@ package com.freshplanet.ane.AirVideo
 		}
 		
 		
+		public function playVideo():void
+		{
+			if (!isSupported) return;
+			
+			_context.call("playVideo");
+		}
+		
+		public function setControlStyle():void
+		{
+			if (!isSupported) return;
+			
+			_context.call("setControlStyle");
+		}
+		
+		public function setViewDimensions(x:Number, y:Number, width:Number, height:Number):void
+		{
+			if (!isSupported) return;
+			
+			_context.call("setViewDimensions", x, y, width, height);
+		}
+		
+		
 		// --------------------------------------------------------------------------------------//
 		//																						 //
 		// 									 	PRIVATE API										 //
@@ -165,8 +187,13 @@ package com.freshplanet.ane.AirVideo
 		
 		private function onStatus( event : StatusEvent ) : void
 		{
-			if (event.code == "PLAYBACK_DID_FINISH")
+			if (event.code == "LOAD_STATE_COMPLETE")
 			{
+				this.dispatchEvent(new AirVideoEvent(AirVideoEvent.LOAD_STATE_COMPLETE));
+			}
+			else if (event.code == "PLAYBACK_DID_FINISH")
+			{
+				this.dispatchEvent(new AirVideoEvent(AirVideoEvent.DID_FINISH_PLAYING));
 				next();
 			}
 			else if (event.code == "LOGGING") // Simple log message
