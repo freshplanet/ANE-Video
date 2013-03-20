@@ -17,6 +17,9 @@ package com.freshplanet.ane.AirVideo
 		/** Event dispatched each time the currently played video changes. */
 		public static const CURRENT_VIDEO_CHANGED : String = "CURRENT_VIDEO_CHANGED";
 		
+		public static const CONTROL_STYLE_DEFAULT_HUD:int = 0;
+		public static const CONTROL_STYLE_NO_HUD:int = 1;
+		
 		/** AirVideo is supported on iOS and Android devices. */
 		public static function get isSupported() : Boolean
 		{
@@ -100,6 +103,15 @@ package com.freshplanet.ane.AirVideo
 			setCurrentVideo(url);
 		}
 		
+		
+		public function bufferVideos( videos:Array ):void
+		{
+			if (!isSupported) return;
+			
+			_context.call("bufferVideos", videos);
+		}
+		
+		
 		/**
 		 * Return an array containing the URLs of the videos currently in the queue. The video currently
 		 * played is not part of the queue.
@@ -139,18 +151,18 @@ package com.freshplanet.ane.AirVideo
 		}
 		
 		
-		public function playVideo():void
+		public function playVideo(position:int):void
 		{
 			if (!isSupported) return;
 			
-			_context.call("playVideo");
+			_context.call("playVideo", position);
 		}
 		
-		public function setControlStyle():void
+		public function setControlStyle(controlStyle:int):void
 		{
 			if (!isSupported) return;
 			
-			_context.call("setControlStyle");
+			_context.call("setControlStyle", controlStyle);
 		}
 		
 		public function setViewDimensions(x:Number, y:Number, width:Number, height:Number):void
@@ -189,7 +201,7 @@ package com.freshplanet.ane.AirVideo
 		{
 			if (event.code == "LOAD_STATE_COMPLETE")
 			{
-				this.dispatchEvent(new AirVideoEvent(AirVideoEvent.LOAD_STATE_COMPLETE));
+				this.dispatchEvent(new AirVideoEvent(AirVideoEvent.LOAD_STATE_COMPLETE, parseInt(event.level)));
 			}
 			else if (event.code == "PLAYBACK_DID_FINISH")
 			{

@@ -10,10 +10,18 @@ package com.freshplanet.ane.AirVideo
 		
 		public static const DID_FINISH_PLAYING:String = "DID_FINISH_PLAYING";
 		
+		private var _position:int;
 		
-		public function AirVideoEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function AirVideoEvent(type:String, aPosition:int = 0, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
+			_position = aPosition;
 		}
+		
+		public function get position():int
+		{
+			return _position
+		}
+		
 	}
 }

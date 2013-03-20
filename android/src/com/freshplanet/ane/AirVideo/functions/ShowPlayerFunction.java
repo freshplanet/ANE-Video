@@ -34,7 +34,7 @@ public class ShowPlayerFunction implements FREFunction
 	{
 		ViewGroup rootContainer = Extension.context.getRootContainer();
 		ViewGroup videoContainer = Extension.context.getVideoContainer();
-		rootContainer.addView(videoContainer, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.CENTER));
+		rootContainer.addView(videoContainer, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, Gravity.TOP));
 		
 		return null;
 	}

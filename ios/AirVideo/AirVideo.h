@@ -20,11 +20,16 @@
 #import <MediaPlayer/MediaPlayer.h>
 
 @interface AirVideo : NSObject
-
+{
+    NSMutableDictionary* videosData;
+    CGRect  requestedFrame;
+}
 @property (nonatomic, readonly) MPMoviePlayerController *player;
+@property (nonatomic, retain) NSMutableDictionary* videosData;
+@property (nonatomic, assign) CGRect requestedFrame;
+
 
 + (id)sharedInstance;
-
 + (void)dispatchEvent:(NSString *)eventName withInfo:(NSString *)info;
 + (void)log:(NSString *)message;
 
@@ -35,9 +40,11 @@
 DEFINE_ANE_FUNCTION(showPlayer);
 DEFINE_ANE_FUNCTION(hidePlayer);
 DEFINE_ANE_FUNCTION(fetchVideo);
-//DEFINE_ANE_FUNCTION(setViewDimensions);
-//DEFINE_ANE_FUNCTION(setControlStyle);
-//DEFINE_ANE_FUNCTION(playVideo);
+DEFINE_ANE_FUNCTION(setViewDimensions);
+DEFINE_ANE_FUNCTION(setControlStyle);
+DEFINE_ANE_FUNCTION(playVideo);
+DEFINE_ANE_FUNCTION(bufferVideos);
+
 
 
 // ANE Setup

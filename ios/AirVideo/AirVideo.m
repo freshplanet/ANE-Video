@@ -25,12 +25,15 @@ FREContext AirVideoCtx = nil;
 
 - (void)playerLoadStateDidChange:(NSNotification *)notification;
 - (void)playerPlaybackDidFinish:(NSNotification *)notification;
-- (void)displayVideo;
+- (void)resizeVideo;
+- (void)startBuffering:(NSArray*)urls;
 @end
 
 @implementation AirVideo
 
 @synthesize player = _player;
+@synthesize videosData;
+@synthesize requestedFrame = CGRectNull;
 
 #pragma mark - Singleton
 
@@ -117,10 +120,14 @@ static AirVideo *sharedInstance = nil;
     } else if (self.player.loadState == MPMovieLoadStateStalled)
     {
          NSLog(@"stalled");
+    } else
+    {
+        NSLog(@"unkwon state %i", self.player.loadState);
     }
     
-    if (self.player.loadState == MPMovieLoadStatePlayable)
+    if (self.player.loadState == (MPMovieLoadStatePlayable | MPMovieLoadStatePlaythroughOK) || self.player.loadState == MPMovieLoadStatePlayable || self.player.loadState == MPMovieLoadStatePlaythroughOK)
     {
+//        [self displayVideo];
         UIView *rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
         
         // Resize player
@@ -129,12 +136,11 @@ static AirVideo *sharedInstance = nil;
         playerFrame.size.width = MIN(rootView.frame.size.width, movieSize.width);
         playerFrame.size.height = playerFrame.size.width * movieSize.height / movieSize.width;
         self.player.view.frame = playerFrame;
+        [self resizeVideo];
+        
         
         // Center player
-        self.player.view.center = rootView.center;
-        
-        
-//        [AirVideo dispatchEvent:@"LOAD_STATE_COMPLETE" withInfo:@"message"];
+//        self.player.view.center = rootView.center;
     }
 }
 
@@ -143,21 +149,86 @@ static AirVideo *sharedInstance = nil;
     [AirVideo dispatchEvent:@"PLAYBACK_DID_FINISH" withInfo:@"OK"];
 }
 
-- (void)displayVideo
+- (void)resizeVideo
 {
-    NSLog(@"[displayVideo]");
-    UIView *rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
+    NSLog(@"[resizeVideo]");
+
+    NSLog(@"%@",NSStringFromCGRect([[AirVideo sharedInstance] requestedFrame]));
+
     
-    // Resize player
-    CGSize movieSize = self.player.naturalSize;
-    CGRect playerFrame = self.player.view.frame;
-    playerFrame.size.width = MIN(rootView.frame.size.width, movieSize.width);
-    playerFrame.size.height = playerFrame.size.width * movieSize.height / movieSize.width;
-    self.player.view.frame = playerFrame;
-    
-    // Center player
-    self.player.view.center = rootView.center;
+    if (self.player != nil && self.player.view != nil && !CGRectIsNull(self.requestedFrame))
+    {
+        // Resize player
+        self.player.view.frame = [self requestedFrame];
+    }
 }
+
+
+-(void)startBuffering:(NSArray*)urls
+{
+    NSLog(@"Start Buffering");
+    NSInteger i = 0;
+    [self setVideosData:[NSMutableDictionary dictionary]];
+    for (NSString *url in urls) {
+        NSLog(@"buffering for url %@", url);
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+
+        [NSURLConnection sendAsynchronousRequest:request
+                                           queue:[NSOperationQueue mainQueue]
+                               completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+                                   NSLog(@"request received");
+                                   NSLog(@"response: %@", [response MIMEType]);
+                                   NSLog(@"data length: %i", [data length]);
+                                   NSLog(@"error %@", error);
+                                   [[AirVideo sharedInstance] storeVideoData:data atPosition:i];
+                               }];
+        i++;
+    }
+}
+
+-(void)storeVideoData:(NSData*)data atPosition:(NSInteger)position
+{
+    if (videosData == nil)
+    {
+        [self setVideosData:[NSMutableDictionary dictionary]];
+    }
+    
+    if (data == nil)
+    {
+        NSLog(@"object nil at position %i", position);
+    }
+    else
+    {
+        NSLog(@"replacing object at index %i for array length %i", position, [[self videosData] count]);
+        [[self videosData] setObject:data forKey:[NSString stringWithFormat:@"%i", position]];
+    }
+    
+    [AirVideo dispatchEvent:@"LOAD_STATE_COMPLETE" withInfo:[NSString stringWithFormat:@"%i", position]];
+}
+
+
+-(void)playForPosition:(NSInteger)position
+{
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *path = [documentsDirectory stringByAppendingPathComponent:@"myMove.mp4"];
+
+    NSData *videoData = [[self videosData] objectForKey:[NSString stringWithFormat:@"%i", position]];
+    if (videoData != nil)
+    {
+        NSLog(@"videoData found at position %i", position);
+        [videoData writeToFile:path atomically:YES];
+        NSURL *moveUrl = [NSURL fileURLWithPath:path];
+        [[[AirVideo sharedInstance] player] setContentURL:moveUrl];
+        [[[AirVideo sharedInstance] player] prepareToPlay];
+    } else
+    {
+        NSLog(@"videoData not found at position %i", position);
+    }
+    
+}
+
 
 @end
 
@@ -181,39 +252,64 @@ DEFINE_ANE_FUNCTION(hidePlayer)
     return nil;
 }
 
-//DEFINE_ANE_FUNCTION(loadVideo)
-//{
-//    NSLog(@"[loadVideo]");
-//    
-//    NSLog(@"start loading video");
-//    uint32_t stringLength;
-//    
-//    NSString *url = nil;
-//    const uint8_t *urlString;
-//    if (FREGetObjectAsUTF8(argv[0], &stringLength, &urlString) == FRE_OK)
-//    {
-//        url = [NSString stringWithUTF8String:(const char *)urlString];
-//    }
-//    
-//    if (url)
-//    {
-////        NSLog(@"url found %@", url);
-//        [[[AirVideo sharedInstance] player] setContentURL:[NSURL URLWithString:url]];
-//        [[[AirVideo sharedInstance] player] play];
-////        [[[AirVideo sharedInstance] player] stop];
-//    } else
-//    {
-////        NSLog(@"url not found");
-//    }
-//    
-//    return nil;
-//}
 
-//DEFINE_ANE_FUNCTION(setViewDimensions)
-//{
-//    // todo set the size
-//    return nil;
-//}
+DEFINE_ANE_FUNCTION(setViewDimensions)
+{
+    // todo set the size
+    
+    if (argc < 4)
+    {
+        NSLog(@"not enough args");
+        return nil;
+    }
+    
+    double x;
+    double y;
+    double width;
+    double height;
+    if (FREGetObjectAsDouble(argv[0], &x) == FRE_OK)
+    {
+        NSLog(@"x: %f", x);
+    } else
+    {
+        NSLog(@"couldnt parse number");
+        return nil;
+    }
+    
+    if (FREGetObjectAsDouble(argv[1], &y) == FRE_OK)
+    {
+        NSLog(@"y: %f", y);
+    } else
+    {
+        NSLog(@"couldnt parse number");
+        return nil;
+    }
+
+    if (FREGetObjectAsDouble(argv[2], &width) == FRE_OK)
+    {
+        NSLog(@"width: %f", width);
+    } else
+    {
+        NSLog(@"couldnt parse number");
+        return nil;
+    }
+
+    if (FREGetObjectAsDouble(argv[3], &height) == FRE_OK)
+    {
+        NSLog(@"height: %f", height);
+    } else
+    {
+        NSLog(@"couldnt parse number");
+        return nil;
+    }
+
+    [[AirVideo sharedInstance] setRequestedFrame:CGRectMake(x, y, width, height)];
+    
+    NSLog(@"%@",NSStringFromCGRect([[AirVideo sharedInstance] requestedFrame]));
+    
+    [[AirVideo sharedInstance] resizeVideo];
+    return nil;
+}
 
 
 DEFINE_ANE_FUNCTION(fetchVideo)
@@ -234,10 +330,7 @@ DEFINE_ANE_FUNCTION(fetchVideo)
         NSLog(@"[fetchVideo] url found: %@", url);
         [[[AirVideo sharedInstance] player] setContentURL:[NSURL URLWithString:url]];
         [[[AirVideo sharedInstance] player] prepareToPlay];
-        
-        
-        [[AirVideo sharedInstance] displayVideo];
-        
+            
     } else
     {
         NSLog(@"[fetchVideo] url not found");
@@ -248,20 +341,93 @@ DEFINE_ANE_FUNCTION(fetchVideo)
 }
 
 
-//DEFINE_ANE_FUNCTION(setControlStyle)
-//{
-//    // todo set the controller visibility
-//    [[[AirVideo sharedInstance] player] setControlStyle:MPMovieControlStyleNone];
-//    return nil;
-//}
-//
-//
-//DEFINE_ANE_FUNCTION(playVideo)
-//{
-//    // todo start displaying the video
-//    [[[AirVideo sharedInstance] player] play];
-//    return nil;
-//}
+DEFINE_ANE_FUNCTION(setControlStyle)
+{
+    // todo set the controller visibility
+    int32_t value;
+    if (FREGetObjectAsInt32(argv[0], &value) == FRE_OK)
+    {
+        NSLog(@"playing for position %i", value);
+        [[AirVideo sharedInstance] playForPosition:value];
+    } else
+    {
+        NSLog(@"couldnt parse position");
+    }
+    if (value == 0)
+    {
+        [[[AirVideo sharedInstance] player] setControlStyle:MPMovieControlStyleDefault];
+    } else if (value == 1)
+    {
+        [[[AirVideo sharedInstance] player] setControlStyle:MPMovieControlStyleNone];
+    }
+    
+    return nil;
+}
+
+
+DEFINE_ANE_FUNCTION(playVideo)
+{
+    NSLog(@"play Video");
+    int32_t value;
+    if (FREGetObjectAsInt32(argv[0], &value) == FRE_OK)
+    {
+        NSLog(@"playing for position %i", value);
+        [[AirVideo sharedInstance] playForPosition:value];
+    } else
+    {
+        NSLog(@"couldnt parse position");
+    }
+    
+    // todo start displaying the video
+    return nil;
+}
+
+
+DEFINE_ANE_FUNCTION(bufferVideos)
+{
+    // todo start displaying the video
+    
+    
+    FREObject arr = argv[0]; // array
+    uint32_t arr_len; // array length
+    
+    FREGetArrayLength(arr, &arr_len);
+    
+    FREObject populatedArray = NULL;
+    // Create a new AS3 Array, pass 0 arguments to the constructor (and no arguments values = NULL)
+    FRENewObject((const uint8_t*)"Array", 0, NULL, &populatedArray, nil);
+    
+    FRESetArrayLength(populatedArray, arr_len);
+    
+    NSLog(@"Going through the array: %d",arr_len);
+    
+    NSMutableArray *urls = [NSMutableArray array];
+    for(int32_t i=arr_len-1; i>=0;i--){
+        
+        // get an element at index
+        FREObject element;
+        FREGetArrayElementAt(arr, i, &element);
+        
+        // OPTIONAL: get an int value out of the element
+        
+        
+        NSString *url = nil;
+        const uint8_t *urlString;
+        if (FREGetObjectAsUTF8(element, &arr_len, &urlString) == FRE_OK)
+        {
+            url = [NSString stringWithUTF8String:(const char *)urlString];
+        }
+        
+        if (url)
+        {
+            [urls addObject:url];
+        }
+    }
+
+    [[AirVideo sharedInstance] startBuffering:urls];
+    
+    return nil;
+}
 
 
 
@@ -272,7 +438,7 @@ void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     NSLog(@"[AirVideoContextInitializer]");
     
     // Register the links btwn AS3 and ObjC. (dont forget to modify the nbFuntionsToLink integer if you are adding/removing functions)
-    NSInteger nbFuntionsToLink = 3;
+    NSInteger nbFuntionsToLink = 7;
     *numFunctionsToTest = nbFuntionsToLink;
     
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * nbFuntionsToLink);
@@ -289,17 +455,21 @@ void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     func[2].functionData = NULL;
     func[2].function = &fetchVideo;
     
-//    func[3].name = (const uint8_t*) "setViewDimensions";
-//    func[3].functionData = NULL;
-//    func[3].function = &setViewDimensions;
-//    
-//    func[4].name = (const uint8_t*) "setControlStyle";
-//    func[4].functionData = NULL;
-//    func[4].function = &setControlStyle;
-//    
-//    func[5].name = (const uint8_t*) "playVideo";
-//    func[5].functionData = NULL;
-//    func[5].function = &playVideo;
+    func[3].name = (const uint8_t*) "setViewDimensions";
+    func[3].functionData = NULL;
+    func[3].function = &setViewDimensions;
+    
+    func[4].name = (const uint8_t*) "setControlStyle";
+    func[4].functionData = NULL;
+    func[4].function = &setControlStyle;
+    
+    func[5].name = (const uint8_t*) "playVideo";
+    func[5].functionData = NULL;
+    func[5].function = &playVideo;
+
+    func[6].name = (const uint8_t*) "bufferVideos";
+    func[6].functionData = NULL;
+    func[6].function = &bufferVideos;
 
     
     *functionsToSet = func;
