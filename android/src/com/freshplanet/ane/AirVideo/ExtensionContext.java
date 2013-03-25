@@ -26,9 +26,7 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.MediaController;
-import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
 import com.adobe.fre.FREContext;
@@ -36,6 +34,7 @@ import com.adobe.fre.FREFunction;
 import com.freshplanet.ane.AirVideo.functions.BufferVideosFunction;
 import com.freshplanet.ane.AirVideo.functions.HidePlayerFunction;
 import com.freshplanet.ane.AirVideo.functions.LoadVideoFunction;
+import com.freshplanet.ane.AirVideo.functions.PauseVideoFunction;
 import com.freshplanet.ane.AirVideo.functions.PlayVideoFunction;
 import com.freshplanet.ane.AirVideo.functions.SetControlStyleFunction;
 import com.freshplanet.ane.AirVideo.functions.SetViewDimensionsFunction;
@@ -62,6 +61,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 		functions.put("playVideo", new PlayVideoFunction());
 		functions.put("setControlStyle", new SetControlStyleFunction());
 		functions.put("setViewDimensions", new SetViewDimensionsFunction());
+		functions.put("pauseCurrentVideo", new PauseVideoFunction());
 		return functions;
 	}
 	
@@ -144,6 +144,11 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 		videoLayoutParams.leftMargin = (int) x;
 		videoLayoutParams.topMargin = (int) y;
 		getVideoView().setLayoutParams(videoLayoutParams);
+	}
+	
+	public void pauseVideo()
+	{
+		getVideoView().stopPlayback();
 	}
 	
 }

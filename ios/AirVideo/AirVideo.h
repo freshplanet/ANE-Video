@@ -44,7 +44,7 @@ DEFINE_ANE_FUNCTION(setViewDimensions);
 DEFINE_ANE_FUNCTION(setControlStyle);
 DEFINE_ANE_FUNCTION(playVideo);
 DEFINE_ANE_FUNCTION(bufferVideos);
-
+DEFINE_ANE_FUNCTION(pauseCurrentVideo);
 
 
 // ANE Setup

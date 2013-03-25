@@ -1,5 +1,6 @@
 package com.freshplanet.ane.AirVideo
 {
+	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.StatusEvent;
@@ -83,6 +84,87 @@ package com.freshplanet.ane.AirVideo
 			_context.call("hidePlayer");
 		}
 		
+		/** Buffers the video data associated to the urls
+		 * 
+		 * @param videos: Array of url hosting mp4 videos
+		 * */
+		public function bufferVideos( videos:Array ):void
+		{
+			if (!isSupported) 
+			{
+				_desktopVideo.bufferVideos(videos);
+			} else
+			{
+				_context.call("bufferVideos", videos);
+			}
+			
+		}
+
+		private var _stage:Stage;
+		private var _desktopVideo:DesktopAirVideo;
+		
+		public function setStage(value:Stage):void
+		{
+			_desktopVideo = new DesktopAirVideo(_context, value);
+		}
+		
+
+		/** Play a video at position i (from the list of buffered videos)*/
+		public function playVideo(position:int):void
+		{
+			if (!isSupported) 
+			{
+				_desktopVideo.playVideo(position);
+			} else
+			{
+				_context.call("playVideo", position);
+			}
+		}
+		
+		/** Play a video at position i (from the list of buffered videos)*/
+		public function pauseVideo(position:int):void
+		{
+			if (!isSupported)
+			{
+				_desktopVideo.pauseVideo(position);
+			} else
+			{
+				_context.call("pauseCurrentVideo");
+			}
+			
+		}
+
+		
+		/** Set control style for video player. @see CONTROL_STYLE_DEFAULT_HUD, CONTROL_STYLE_NO_HUD*/
+		public function setControlStyle(controlStyle:int):void
+		{
+			if (!isSupported) return;
+			
+			_context.call("setControlStyle", controlStyle);
+		}
+		
+		/** Set the video player dimensions*/
+		public function setViewDimensions(x:Number, y:Number, width:Number, height:Number):void
+		{
+			if (!isSupported)
+			{
+				_desktopVideo.setViewDimensions(x, y, width, height);
+			} else
+			{
+				_context.call("setViewDimensions", x, y, width, height);
+			}
+		}
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		/** Return the URL of the video being played currently, or <code>null</code> nothing is playing. */
 		public function get currentVideo() : String
 		{
@@ -104,12 +186,6 @@ package com.freshplanet.ane.AirVideo
 		}
 		
 		
-		public function bufferVideos( videos:Array ):void
-		{
-			if (!isSupported) return;
-			
-			_context.call("bufferVideos", videos);
-		}
 		
 		
 		/**
@@ -151,26 +227,6 @@ package com.freshplanet.ane.AirVideo
 		}
 		
 		
-		public function playVideo(position:int):void
-		{
-			if (!isSupported) return;
-			
-			_context.call("playVideo", position);
-		}
-		
-		public function setControlStyle(controlStyle:int):void
-		{
-			if (!isSupported) return;
-			
-			_context.call("setControlStyle", controlStyle);
-		}
-		
-		public function setViewDimensions(x:Number, y:Number, width:Number, height:Number):void
-		{
-			if (!isSupported) return;
-			
-			_context.call("setViewDimensions", x, y, width, height);
-		}
 		
 		
 		// --------------------------------------------------------------------------------------//

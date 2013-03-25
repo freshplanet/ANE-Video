@@ -27,6 +27,7 @@ FREContext AirVideoCtx = nil;
 - (void)playerPlaybackDidFinish:(NSNotification *)notification;
 - (void)resizeVideo;
 - (void)startBuffering:(NSArray*)urls;
+- (void)pauseVideo;
 @end
 
 @implementation AirVideo
@@ -159,7 +160,13 @@ static AirVideo *sharedInstance = nil;
     if (self.player != nil && self.player.view != nil && !CGRectIsNull(self.requestedFrame))
     {
         // Resize player
-        self.player.view.frame = [self requestedFrame];
+        if ([[UIScreen mainScreen] scale] == 2.0) {
+            CGRect retinaRect = CGRectMake(CGRectGetMinX(self.requestedFrame)/2, CGRectGetMinY(self.requestedFrame)/2, CGRectGetWidth(self.requestedFrame)/2, CGRectGetHeight(self.requestedFrame)/2);
+            self.player.view.frame = retinaRect;
+        } else
+        {
+            self.player.view.frame = [self requestedFrame];
+        }
     }
 }
 
@@ -228,6 +235,13 @@ static AirVideo *sharedInstance = nil;
     }
     
 }
+
+-(void)pauseVideo
+{
+    NSLog(@"pause current video");
+    [[[AirVideo sharedInstance] player] pause];
+}
+
 
 
 @end
@@ -378,9 +392,16 @@ DEFINE_ANE_FUNCTION(playVideo)
         NSLog(@"couldnt parse position");
     }
     
-    // todo start displaying the video
     return nil;
 }
+
+DEFINE_ANE_FUNCTION(pauseCurrentVideo)
+{
+    NSLog(@"pause Video");
+    [[AirVideo sharedInstance] pauseVideo];
+    return nil;
+}
+
 
 
 DEFINE_ANE_FUNCTION(bufferVideos)
@@ -438,7 +459,7 @@ void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     NSLog(@"[AirVideoContextInitializer]");
     
     // Register the links btwn AS3 and ObjC. (dont forget to modify the nbFuntionsToLink integer if you are adding/removing functions)
-    NSInteger nbFuntionsToLink = 7;
+    NSInteger nbFuntionsToLink = 8;
     *numFunctionsToTest = nbFuntionsToLink;
     
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * nbFuntionsToLink);
@@ -470,6 +491,10 @@ void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     func[6].name = (const uint8_t*) "bufferVideos";
     func[6].functionData = NULL;
     func[6].function = &bufferVideos;
+
+    func[7].name = (const uint8_t*) "pauseCurrentVideo";
+    func[7].functionData = NULL;
+    func[7].function = &pauseCurrentVideo;
 
     
     *functionsToSet = func;
