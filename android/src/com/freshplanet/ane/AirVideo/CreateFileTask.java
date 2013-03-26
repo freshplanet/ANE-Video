@@ -1,24 +1,30 @@
 package com.freshplanet.ane.AirVideo;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class CreateFileTask extends AsyncTask<InputStream, Integer, String> {
+public class CreateFileTask extends AsyncTask<byte[], Integer, String> {
 
 	private static String TAG = "CreateFileTask";
 	
 	private String filePath = null;
+	private int mTimePosition = 0;
+	
+	public void setParams(int position, int timePosition)
+	{
+		this.mTimePosition = timePosition;
+	}
 	
 	
 	@Override
-	protected String doInBackground(InputStream... inputs) {
+	protected String doInBackground(byte[]... inputs) {
 
 		if (inputs == null || inputs.length == 0)
 		{
@@ -26,13 +32,17 @@ public class CreateFileTask extends AsyncTask<InputStream, Integer, String> {
 			return null;
 		}
 		
-		InputStream input = inputs[0];
-
-		if (input == null)
+		byte[] bInput = inputs[0];
+		
+		if (bInput == null)
 		{
 			Log.d(TAG, "stream is null");
 			return null;
 		}
+
+		
+		ByteArrayInputStream input = new ByteArrayInputStream(bInput);
+		
 		
 		Log.d(TAG, "creating file");
 		File tempFile;
@@ -89,19 +99,30 @@ public class CreateFileTask extends AsyncTask<InputStream, Integer, String> {
 				e.printStackTrace();
 			}
 		}
-	    
+		
 		return null;
 	}
 
 	@Override
     protected void onPostExecute(String result) {
 		
-		Log.d(TAG, "setting the video param");
-		Extension.context.getVideoView().setVideoURI(Uri.parse(filePath));
-		Log.d(TAG, "starting the video");
 		
-		Extension.context.getVideoView().start();
-
+		Log.d(TAG, "setting the video param");
+		Log.d(TAG, "starting the video");
+		try
+		{
+			Extension.context.getVideoView().setVideoURI(Uri.parse(filePath));
+			if (mTimePosition > 0)
+			{
+				Log.d(TAG, "seeking to "+Integer.toString(mTimePosition));
+				Extension.context.getVideoView().seekTo(mTimePosition);
+			}
+			Extension.context.getVideoView().start();
+		} catch (Exception e)
+		{
+			Log.e(TAG, "exception occured");
+			e.printStackTrace();
+		}
 	}
 
 	

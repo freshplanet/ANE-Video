@@ -43,8 +43,6 @@ public class BufferVideosFunction implements FREFunction
 			try {
 				url = inputArray.getObjectAt(i).getAsString();
 				outputArray[i] = url;
-				Log.d(TAG, "adding url: "+url);
-				
 				FetchVideoTask task = new FetchVideoTask();
 				task.setParams(i);
 				URL urlObject = new URL(url);

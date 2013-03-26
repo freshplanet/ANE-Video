@@ -28,6 +28,7 @@ FREContext AirVideoCtx = nil;
 - (void)resizeVideo;
 - (void)startBuffering:(NSArray*)urls;
 - (void)pauseVideo;
+- (void)resume;
 @end
 
 @implementation AirVideo
@@ -239,10 +240,15 @@ static AirVideo *sharedInstance = nil;
 -(void)pauseVideo
 {
     NSLog(@"pause current video");
-    [[[AirVideo sharedInstance] player] pause];
+    [self.player pause];
 }
 
-
+-(void)resume
+{
+    NSLog(@"resume video");
+//    if (self.player.playbackState )
+    [self.player play];
+}
 
 @end
 
@@ -423,7 +429,7 @@ DEFINE_ANE_FUNCTION(bufferVideos)
     NSLog(@"Going through the array: %d",arr_len);
     
     NSMutableArray *urls = [NSMutableArray array];
-    for(int32_t i=arr_len-1; i>=0;i--){
+    for(int32_t i=0; i< arr_len;i++){
         
         // get an element at index
         FREObject element;
@@ -451,6 +457,14 @@ DEFINE_ANE_FUNCTION(bufferVideos)
 }
 
 
+DEFINE_ANE_FUNCTION(resumeVideo)
+{
+    NSLog(@"pause Video");
+    [[AirVideo sharedInstance] resume];
+    return nil;
+}
+
+
 
 void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,
                         uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet) 
@@ -459,7 +473,7 @@ void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     NSLog(@"[AirVideoContextInitializer]");
     
     // Register the links btwn AS3 and ObjC. (dont forget to modify the nbFuntionsToLink integer if you are adding/removing functions)
-    NSInteger nbFuntionsToLink = 8;
+    NSInteger nbFuntionsToLink = 9;
     *numFunctionsToTest = nbFuntionsToLink;
     
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * nbFuntionsToLink);
@@ -496,6 +510,9 @@ void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     func[7].functionData = NULL;
     func[7].function = &pauseCurrentVideo;
 
+    func[8].name = (const uint8_t*) "resumeVideo";
+    func[8].functionData = NULL;
+    func[8].function = &resumeVideo;
     
     *functionsToSet = func;
     

@@ -18,14 +18,15 @@
 
 package com.freshplanet.ane.AirVideo;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -36,12 +37,14 @@ import com.freshplanet.ane.AirVideo.functions.HidePlayerFunction;
 import com.freshplanet.ane.AirVideo.functions.LoadVideoFunction;
 import com.freshplanet.ane.AirVideo.functions.PauseVideoFunction;
 import com.freshplanet.ane.AirVideo.functions.PlayVideoFunction;
+import com.freshplanet.ane.AirVideo.functions.ResumeVideoFunction;
 import com.freshplanet.ane.AirVideo.functions.SetControlStyleFunction;
 import com.freshplanet.ane.AirVideo.functions.SetViewDimensionsFunction;
 import com.freshplanet.ane.AirVideo.functions.ShowPlayerFunction;
 
 public class ExtensionContext extends FREContext implements OnCompletionListener
 {
+	
 	private VideoView _videoView = null;
 	private ViewGroup _videoContainer = null;
 	
@@ -62,6 +65,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 		functions.put("setControlStyle", new SetControlStyleFunction());
 		functions.put("setViewDimensions", new SetViewDimensionsFunction());
 		functions.put("pauseCurrentVideo", new PauseVideoFunction());
+		functions.put("resumeVideo", new ResumeVideoFunction());
 		return functions;
 	}
 	
@@ -96,22 +100,21 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 			_videoView.setMediaController(new MediaController(getActivity()));
 			_videoView.setOnCompletionListener(this);
 		}
-		
 		return _videoView;
 	}
 	
-	private HashMap<String, InputStream> videosData = null;
+	private HashMap<String, byte[]> videosData = null;
 	
-	public void setStreamAtPosition(InputStream stream, int position)
+	public void setStreamAtPosition(byte[] stream, int position)
 	{
 		if (videosData == null)
 		{
-			videosData = new HashMap<String, InputStream>();
+			videosData = new HashMap<String, byte[]>();
 		}
 		videosData.put(Integer.toString(position), stream);
 	}
 
-	public InputStream getStreamAtPosition(int position)
+	public byte[] getStreamAtPosition(int position)
 	{
 		if (videosData == null)
 		{
@@ -148,7 +151,38 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	
 	public void pauseVideo()
 	{
-		getVideoView().stopPlayback();
+		getVideoView().pause();
+	}
+	
+	public void resizeVideo()
+	{
+		getVideoView().setLayoutParams(videoLayoutParams);
+	}
+	
+	public void showPlayer()
+	{
+		ViewGroup rootContainer = getRootContainer();
+		ViewGroup videoContainer = getVideoContainer();
+		rootContainer.addView(videoContainer, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, Gravity.TOP));
+	}
+	
+	public void hidePlayer()
+	{
+		ViewGroup rootContainer = getRootContainer();
+		ViewGroup videoContainer = getVideoContainer();
+		rootContainer.removeView(videoContainer);
+
+	}
+	
+	public void disposeVideo()
+	{
+		if (_videoContainer != null)
+		{
+			getRootContainer().removeView(_videoContainer);
+			_videoContainer.removeAllViews();
+			_videoContainer = null;
+		}
+		_videoView = null;
 	}
 	
 }

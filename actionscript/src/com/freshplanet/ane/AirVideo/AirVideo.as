@@ -156,6 +156,13 @@ package com.freshplanet.ane.AirVideo
 		}
 
 		
+		public function resumeVideo(position:int, time:int):void
+		{
+			if (isSupported)
+			{
+				_context.call("resumeVideo", position, time);
+			}
+		}
 		
 		
 		

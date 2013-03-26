@@ -18,10 +18,6 @@
 
 package com.freshplanet.ane.AirVideo.functions;
 
-import android.view.Gravity;
-import android.view.ViewGroup;
-import android.widget.FrameLayout.LayoutParams;
-
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
@@ -32,10 +28,7 @@ public class ShowPlayerFunction implements FREFunction
 	@Override
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		ViewGroup rootContainer = Extension.context.getRootContainer();
-		ViewGroup videoContainer = Extension.context.getVideoContainer();
-		rootContainer.addView(videoContainer, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, Gravity.TOP));
-		
+		Extension.context.showPlayer();
 		return null;
 	}
 }

@@ -1,7 +1,5 @@
 package com.freshplanet.ane.AirVideo.functions;
 
-import java.io.InputStream;
-
 import android.util.Log;
 
 import com.adobe.fre.FREContext;
@@ -29,14 +27,10 @@ public class PlayVideoFunction implements FREFunction {
 		}
 		
 		Log.d(TAG, "fetching stream");
-		InputStream input = Extension.context.getStreamAtPosition(position);
-	    
+		byte[] input = Extension.context.getStreamAtPosition(position);
 		CreateFileTask task = new CreateFileTask();
 		task.execute(input);
-		
 		Log.d(TAG, "reading file");
-		
-		
 		return null;
 	}
 
