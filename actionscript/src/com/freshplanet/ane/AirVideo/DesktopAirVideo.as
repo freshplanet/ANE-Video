@@ -65,10 +65,7 @@ package com.freshplanet.ane.AirVideo
 			_y = y;
 			_width = width;
 			_height = height;
-			if (_stageVideo)
-			{
-				resize();
-			}
+			resize();
 		}
 		
 		public function playVideo(position:int):void
@@ -81,7 +78,7 @@ package com.freshplanet.ane.AirVideo
 		
 		public function showPlayer():void
 		{
-			_stage.addChildAt(_stageVideo, 0);
+			_stage.addChildAt(_stageVideo, _stage.numChildren);
 			_stageVideo.visible = true;
 		}
 		
@@ -108,7 +105,6 @@ package com.freshplanet.ane.AirVideo
 		private var _y:Number;
 		private var _width:Number;
 		private var _height:Number;
-		
 		private var _stageVideo:Video;
 		
 		
@@ -121,7 +117,6 @@ package com.freshplanet.ane.AirVideo
 				_stageVideo.y = _y;
 				_stageVideo.width = _width;
 				_stageVideo.height = _height;
-
 			}
 		}
 		

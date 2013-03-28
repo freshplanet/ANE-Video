@@ -71,17 +71,25 @@ package com.freshplanet.ane.AirVideo
 		/** Add the video player to the display list, at the center of the stage. */
 		public function showPlayer() : void
 		{
-			if (!isSupported) return;
-			
-			_context.call("showPlayer");
+			if (!isSupported)
+			{
+				_desktopVideo.showPlayer();
+			} else
+			{
+				_context.call("showPlayer");
+			}
 		}
 		
 		/** Remove the video player from the display list. */
 		public function hidePlayer() : void
 		{
-			if (!isSupported) return;
-			
-			_context.call("hidePlayer");
+			if (!isSupported)
+			{
+				_desktopVideo.hidePlayer();
+			} else
+			{
+				_context.call("hidePlayer");
+			}
 		}
 		
 		/** Buffers the video data associated to the urls
