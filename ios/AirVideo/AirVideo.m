@@ -25,6 +25,7 @@ FREContext AirVideoCtx = nil;
 
 - (void)playerLoadStateDidChange:(NSNotification *)notification;
 - (void)playerPlaybackDidFinish:(NSNotification *)notification;
+- (void)playerMovieDidChange:(NSNotification *)notification;
 - (void)resizeVideo;
 - (void)startBuffering:(NSArray*)urls;
 - (void)pauseVideo;
@@ -83,9 +84,14 @@ static AirVideo *sharedInstance = nil;
         // Initializer movie player
         _player = [[MPMoviePlayerController alloc] init];
         
+        _player.movieSourceType = MPMovieSourceTypeFile;
+        _player.scalingMode = MPMovieScalingModeAspectFit;
+        
         // Register for notifications
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerLoadStateDidChange:) name:MPMoviePlayerLoadStateDidChangeNotification object:_player];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerPlaybackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:_player];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerMovieDidChange:) name:MPMediaPlaybackIsPreparedToPlayDidChangeNotification object:_player];
+
     }
     
     return _player;
@@ -129,7 +135,6 @@ static AirVideo *sharedInstance = nil;
     
     if (self.player.loadState == (MPMovieLoadStatePlayable | MPMovieLoadStatePlaythroughOK) || self.player.loadState == MPMovieLoadStatePlayable || self.player.loadState == MPMovieLoadStatePlaythroughOK)
     {
-//        [self displayVideo];
         UIView *rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
         
         // Resize player
@@ -139,16 +144,17 @@ static AirVideo *sharedInstance = nil;
         playerFrame.size.height = playerFrame.size.width * movieSize.height / movieSize.width;
         self.player.view.frame = playerFrame;
         [self resizeVideo];
-        
-        
-        // Center player
-//        self.player.view.center = rootView.center;
     }
 }
 
 - (void)playerPlaybackDidFinish:(NSNotification *)notification
 {
     [AirVideo dispatchEvent:@"PLAYBACK_DID_FINISH" withInfo:@"OK"];
+}
+
+- (void)playerMovieDidChange:(NSNotification *)notification
+{
+    [self.player.view setHidden:NO];
 }
 
 - (void)resizeVideo
@@ -246,9 +252,15 @@ static AirVideo *sharedInstance = nil;
 -(void)resume
 {
     NSLog(@"resume video");
-//    if (self.player.playbackState )
     [self.player play];
 }
+
+
+-(void)showWhenReady
+{
+    [self.player.view setHidden:YES];
+}
+
 
 @end
 
@@ -261,6 +273,7 @@ DEFINE_ANE_FUNCTION(showPlayer)
     
     UIView *rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
     [rootView addSubview:[[[AirVideo sharedInstance] player] view]];
+    [[AirVideo sharedInstance] showWhenReady];
     
     return nil;
 }
@@ -431,12 +444,8 @@ DEFINE_ANE_FUNCTION(bufferVideos)
     NSMutableArray *urls = [NSMutableArray array];
     for(int32_t i=0; i< arr_len;i++){
         
-        // get an element at index
         FREObject element;
         FREGetArrayElementAt(arr, i, &element);
-        
-        // OPTIONAL: get an int value out of the element
-        
         
         NSString *url = nil;
         const uint8_t *urlString;
