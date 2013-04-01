@@ -97,7 +97,15 @@ package com.freshplanet.ane.AirVideo
 			netStream.pause();
 		}
 		
-		
+		public function cleanUp():void
+		{
+			for each (var ns:NetStream in _netStreams)
+			{
+				if (ns)
+					ns.dispose();
+			}
+			_netStreams = [];
+		}
 		
 		
 		

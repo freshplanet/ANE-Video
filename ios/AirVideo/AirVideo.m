@@ -18,6 +18,7 @@
 //
 
 #import "AirVideo.h"
+#import "RequestDelegate.h"
 
 FREContext AirVideoCtx = nil;
 
@@ -30,6 +31,7 @@ FREContext AirVideoCtx = nil;
 - (void)startBuffering:(NSArray*)urls;
 - (void)pauseVideo;
 - (void)resume;
+- (void)cleanUp;
 @end
 
 @implementation AirVideo
@@ -186,19 +188,27 @@ static AirVideo *sharedInstance = nil;
     for (NSString *url in urls) {
         NSLog(@"buffering for url %@", url);
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-
-        [NSURLConnection sendAsynchronousRequest:request
-                                           queue:[NSOperationQueue mainQueue]
-                               completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-                                   NSLog(@"request received");
-                                   NSLog(@"response: %@", [response MIMEType]);
-                                   NSLog(@"data length: %i", [data length]);
-                                   NSLog(@"error %@", error);
-                                   [[AirVideo sharedInstance] storeVideoData:data atPosition:i];
-                               }];
+        
+        RequestDelegate *delegate = [[[RequestDelegate alloc] initWithVideo:self forPosition:i] autorelease];
+        
+        [NSURLConnection connectionWithRequest:request delegate:delegate];
+        
+        
+//        [NSURLConnection sendAsynchronousRequest:request
+//                                           queue:[NSOperationQueue mainQueue]
+//                               completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+//                                   NSLog(@"request received");
+//                                   NSLog(@"response: %@", [response MIMEType]);
+//                                   NSLog(@"data length: %i", [data length]);
+//                                   NSLog(@"error %@", error);
+//                                   [[AirVideo sharedInstance] storeVideoData:data atPosition:i];
+//                               }];
         i++;
     }
 }
+
+
+
 
 -(void)storeVideoData:(NSData*)data atPosition:(NSInteger)position
 {
@@ -255,6 +265,15 @@ static AirVideo *sharedInstance = nil;
     [self.player play];
 }
 
+-(void)cleanUp
+{
+    for (NSData* data in self.videosData)
+    {
+        data = nil;
+        [data release];
+    }
+    self.videosData = nil;
+}
 
 -(void)showWhenReady
 {
@@ -473,6 +492,14 @@ DEFINE_ANE_FUNCTION(resumeVideo)
     return nil;
 }
 
+DEFINE_ANE_FUNCTION(cleanUp)
+{
+    NSLog(@"clean up");
+    [[AirVideo sharedInstance] cleanUp];
+    return nil;
+}
+
+
 
 
 void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,
@@ -482,7 +509,7 @@ void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     NSLog(@"[AirVideoContextInitializer]");
     
     // Register the links btwn AS3 and ObjC. (dont forget to modify the nbFuntionsToLink integer if you are adding/removing functions)
-    NSInteger nbFuntionsToLink = 9;
+    NSInteger nbFuntionsToLink = 10;
     *numFunctionsToTest = nbFuntionsToLink;
     
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * nbFuntionsToLink);
@@ -522,6 +549,11 @@ void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     func[8].name = (const uint8_t*) "resumeVideo";
     func[8].functionData = NULL;
     func[8].function = &resumeVideo;
+    
+    func[9].name = (const uint8_t*) "cleanUp";
+    func[9].functionData = NULL;
+    func[9].function = &cleanUp;
+
     
     *functionsToSet = func;
     

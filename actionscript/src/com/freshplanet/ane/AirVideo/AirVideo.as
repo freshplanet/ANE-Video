@@ -172,7 +172,16 @@ package com.freshplanet.ane.AirVideo
 			}
 		}
 		
-		
+		public function cleanUp():void
+		{
+			if (!isSupported)
+			{
+				_desktopVideo.cleanUp();
+			}
+			else {
+				_context.call("cleanUp");
+			}
+		}
 		
 		
 		

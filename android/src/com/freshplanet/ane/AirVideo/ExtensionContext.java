@@ -33,6 +33,7 @@ import android.widget.VideoView;
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.freshplanet.ane.AirVideo.functions.BufferVideosFunction;
+import com.freshplanet.ane.AirVideo.functions.CleanUpFunction;
 import com.freshplanet.ane.AirVideo.functions.HidePlayerFunction;
 import com.freshplanet.ane.AirVideo.functions.LoadVideoFunction;
 import com.freshplanet.ane.AirVideo.functions.PauseVideoFunction;
@@ -66,6 +67,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 		functions.put("setViewDimensions", new SetViewDimensionsFunction());
 		functions.put("pauseCurrentVideo", new PauseVideoFunction());
 		functions.put("resumeVideo", new ResumeVideoFunction());
+		functions.put("cleanUp", new CleanUpFunction());
 		return functions;
 	}
 	
@@ -195,4 +197,8 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 		_videoView = null;
 	}
 	
+	public void cleanUp()
+	{
+		videosData = null;
+	}
 }

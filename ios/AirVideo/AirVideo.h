@@ -33,6 +33,8 @@
 + (void)dispatchEvent:(NSString *)eventName withInfo:(NSString *)info;
 + (void)log:(NSString *)message;
 
+-(void)storeVideoData:(NSData*)data atPosition:(NSInteger)position;
+
 @end
 
 
@@ -46,6 +48,7 @@ DEFINE_ANE_FUNCTION(playVideo);
 DEFINE_ANE_FUNCTION(bufferVideos);
 DEFINE_ANE_FUNCTION(pauseCurrentVideo);
 DEFINE_ANE_FUNCTION(resumeVideo);
+DEFINE_ANE_FUNCTION(cleanUp);
 
 
 // ANE Setup
