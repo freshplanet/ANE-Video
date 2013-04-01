@@ -105,6 +105,8 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	
 	private HashMap<String, byte[]> videosData = null;
 	
+	private int mStyle = 0;
+	
 	public void setStreamAtPosition(byte[] stream, int position)
 	{
 		if (videosData == null)
@@ -130,7 +132,13 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	
 	public void setStyle(int style)
 	{
-		if (style == 1)
+		mStyle = style;
+		updateStyle();
+	}
+	
+	private void updateStyle()
+	{
+		if (mStyle == 1)
 		{
 			getVideoView().setMediaController(null);
 			getVideoView().setClickable(false);
@@ -139,6 +147,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 			getVideoView().setMediaController(new MediaController(getActivity()));
 			getVideoView().setClickable(true);
 		}
+
 	}
 	
 	public void setViewDimensions(double x, double y, double width, double height)
@@ -164,6 +173,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 		ViewGroup rootContainer = getRootContainer();
 		ViewGroup videoContainer = getVideoContainer();
 		rootContainer.addView(videoContainer, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, Gravity.TOP));
+		updateStyle();
 	}
 	
 	public void hidePlayer()
