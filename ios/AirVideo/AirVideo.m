@@ -30,7 +30,7 @@ FREContext AirVideoCtx = nil;
 - (void)resizeVideo;
 - (void)startBuffering:(NSArray*)urls;
 - (void)pauseVideo;
-- (void)resume;
+- (void)resume:(int)playBackTime;
 - (void)cleanUp;
 - (void)setRetinaValue:(double)value;
 
@@ -50,7 +50,6 @@ bool isRetina;
 
 + (AirVideo *)sharedInstance
 {
-    NSLog(@"[sharedInstance]");
     if (sharedInstance == nil)
     {
         sharedInstance = [[super allocWithZone:NULL] init];
@@ -61,13 +60,11 @@ bool isRetina;
 
 + (id)allocWithZone:(NSZone *)zone
 {
-    NSLog(@"[allocWithZone]");
     return [self sharedInstance];
 }
 
 - (id)copy
 {
-    NSLog(@"[copy]");
     return self;
 }
 
@@ -75,7 +72,6 @@ bool isRetina;
 
 - (void)dealloc
 {
-    NSLog(@"[dealloc]");
     [_player release];
     [super dealloc];
 }
@@ -84,9 +80,9 @@ bool isRetina;
 
 - (MPMoviePlayerController *)player
 {
-    NSLog(@"[player]");
     if (!_player)
     {
+        NSLog(@"creating [player]");
         // Initializer movie player
         _player = [[MPMoviePlayerController alloc] init];
         
@@ -263,10 +259,15 @@ bool isRetina;
     [self.player pause];
 }
 
--(void)resume
+-(void)resume:(int)playBackTime
 {
-    NSLog(@"resume video");
+    NSLog(@"resume video state: %d", self.player.loadState);
+    NSLog(@"resume video frame: %@", NSStringFromCGRect(self.player.view.frame));
+    NSLog(@"playback time %f vs requested: %f", self.player.currentPlaybackTime, playBackTime/1000.0);
+    [self.player setInitialPlaybackTime:playBackTime/1000.0];
     [self.player play];
+    [self.player.view setHidden:NO];
+
 }
 
 -(void)cleanUp
@@ -496,8 +497,16 @@ DEFINE_ANE_FUNCTION(bufferVideos)
 
 DEFINE_ANE_FUNCTION(resumeVideo)
 {
-    NSLog(@"pause Video");
-    [[AirVideo sharedInstance] resume];
+    NSLog(@"resuming Video");
+    int32_t value = 0;
+    if (argc > 1)
+    {
+        if (FREGetObjectAsInt32(argv[1], &value) == FRE_OK)
+        {
+            NSLog(@"resuming Video at time %i", value);
+        }
+    }
+    [[AirVideo sharedInstance] resume:value];
     return nil;
 }
 
