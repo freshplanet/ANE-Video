@@ -32,6 +32,8 @@ FREContext AirVideoCtx = nil;
 - (void)pauseVideo;
 - (void)resume;
 - (void)cleanUp;
+- (void)setRetinaValue:(double)value;
+
 @end
 
 @implementation AirVideo
@@ -43,6 +45,8 @@ FREContext AirVideoCtx = nil;
 #pragma mark - Singleton
 
 static AirVideo *sharedInstance = nil;
+
+bool isRetina;
 
 + (AirVideo *)sharedInstance
 {
@@ -169,7 +173,7 @@ static AirVideo *sharedInstance = nil;
     if (self.player != nil && self.player.view != nil && !CGRectIsNull(self.requestedFrame))
     {
         // Resize player
-        if ([[UIScreen mainScreen] scale] == 2.0) {
+        if (isRetina) {
             CGRect retinaRect = CGRectMake(CGRectGetMinX(self.requestedFrame)/2, CGRectGetMinY(self.requestedFrame)/2, CGRectGetWidth(self.requestedFrame)/2, CGRectGetHeight(self.requestedFrame)/2);
             self.player.view.frame = retinaRect;
         } else
@@ -189,9 +193,9 @@ static AirVideo *sharedInstance = nil;
         NSLog(@"buffering for url %@", url);
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
         
-        RequestDelegate *delegate = [[[RequestDelegate alloc] initWithVideo:self forPosition:i] autorelease];
+        RequestDelegate *requestDelegate = [[[RequestDelegate alloc] initWithVideo:self forPosition:i] autorelease];
         
-        [NSURLConnection connectionWithRequest:request delegate:delegate];
+        [NSURLConnection connectionWithRequest:request delegate:requestDelegate];
         
         
 //        [NSURLConnection sendAsynchronousRequest:request
@@ -280,6 +284,16 @@ static AirVideo *sharedInstance = nil;
     [self.player.view setHidden:YES];
 }
 
+-(void)setRetinaValue:(double)value
+{
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGFloat realWidth = [[ UIScreen mainScreen ] bounds ].size.width;
+    isRetina = scale == 2.0;
+    if (isRetina)
+    {
+        isRetina = scale*realWidth == value;
+    }
+}
 
 @end
 
@@ -307,8 +321,6 @@ DEFINE_ANE_FUNCTION(hidePlayer)
 
 DEFINE_ANE_FUNCTION(setViewDimensions)
 {
-    // todo set the size
-    
     if (argc < 4)
     {
         NSLog(@"not enough args");
@@ -319,6 +331,7 @@ DEFINE_ANE_FUNCTION(setViewDimensions)
     double y;
     double width;
     double height;
+    double deviceWidth;
     if (FREGetObjectAsDouble(argv[0], &x) == FRE_OK)
     {
         NSLog(@"x: %f", x);
@@ -354,6 +367,15 @@ DEFINE_ANE_FUNCTION(setViewDimensions)
         NSLog(@"couldnt parse number");
         return nil;
     }
+
+    if (FREGetObjectAsDouble(argv[4], &deviceWidth) != FRE_OK)
+    {
+        NSLog(@"couldnt detect the requestedWidth");
+    } else
+    {
+        [[AirVideo sharedInstance] setRetinaValue:deviceWidth];
+    }
+
 
     [[AirVideo sharedInstance] setRequestedFrame:CGRectMake(x, y, width, height)];
     
@@ -444,22 +466,9 @@ DEFINE_ANE_FUNCTION(pauseCurrentVideo)
 
 DEFINE_ANE_FUNCTION(bufferVideos)
 {
-    // todo start displaying the video
-    
-    
     FREObject arr = argv[0]; // array
     uint32_t arr_len; // array length
-    
     FREGetArrayLength(arr, &arr_len);
-    
-    FREObject populatedArray = NULL;
-    // Create a new AS3 Array, pass 0 arguments to the constructor (and no arguments values = NULL)
-    FRENewObject((const uint8_t*)"Array", 0, NULL, &populatedArray, nil);
-    
-    FRESetArrayLength(populatedArray, arr_len);
-    
-    NSLog(@"Going through the array: %d",arr_len);
-    
     NSMutableArray *urls = [NSMutableArray array];
     for(int32_t i=0; i< arr_len;i++){
         

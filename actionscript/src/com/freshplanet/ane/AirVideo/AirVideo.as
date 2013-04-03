@@ -152,14 +152,14 @@ package com.freshplanet.ane.AirVideo
 		}
 		
 		/** Set the video player dimensions*/
-		public function setViewDimensions(x:Number, y:Number, width:Number, height:Number):void
+		public function setViewDimensions(x:Number, y:Number, width:Number, height:Number, stageWidth:Number):void
 		{
 			if (!isSupported)
 			{
 				_desktopVideo.setViewDimensions(x, y, width, height);
 			} else
 			{
-				_context.call("setViewDimensions", x, y, width, height);
+				_context.call("setViewDimensions", x, y, width, height, stageWidth);
 			}
 		}
 
