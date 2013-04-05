@@ -155,6 +155,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	public void setViewDimensions(double x, double y, double width, double height)
 	{
 		videoLayoutParams = new FrameLayout.LayoutParams((int) width, (int)height);
+		videoLayoutParams.gravity = Gravity.LEFT | Gravity.TOP;
 		videoLayoutParams.leftMargin = (int) x;
 		videoLayoutParams.topMargin = (int) y;
 		getVideoView().setLayoutParams(videoLayoutParams);
