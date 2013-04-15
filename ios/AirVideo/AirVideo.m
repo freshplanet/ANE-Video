@@ -88,6 +88,7 @@ bool isRetina;
         
         _player.movieSourceType = MPMovieSourceTypeFile;
         _player.scalingMode = MPMovieScalingModeAspectFit;
+        _player.allowsAirPlay = FALSE;
         
         // Register for notifications
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerLoadStateDidChange:) name:MPMoviePlayerLoadStateDidChangeNotification object:_player];
