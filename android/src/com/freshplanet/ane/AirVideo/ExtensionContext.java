@@ -23,7 +23,11 @@ import java.util.Map;
 
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnPreparedListener;
+import android.opengl.Visibility;
+import android.provider.MediaStore.Video.VideoColumns;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
@@ -38,12 +42,13 @@ import com.freshplanet.ane.AirVideo.functions.HidePlayerFunction;
 import com.freshplanet.ane.AirVideo.functions.LoadVideoFunction;
 import com.freshplanet.ane.AirVideo.functions.PauseVideoFunction;
 import com.freshplanet.ane.AirVideo.functions.PlayVideoFunction;
+import com.freshplanet.ane.AirVideo.functions.PrepareToPlayFunction;
 import com.freshplanet.ane.AirVideo.functions.ResumeVideoFunction;
 import com.freshplanet.ane.AirVideo.functions.SetControlStyleFunction;
 import com.freshplanet.ane.AirVideo.functions.SetViewDimensionsFunction;
 import com.freshplanet.ane.AirVideo.functions.ShowPlayerFunction;
 
-public class ExtensionContext extends FREContext implements OnCompletionListener
+public class ExtensionContext extends FREContext implements OnCompletionListener, OnPreparedListener
 {
 	
 	private VideoView _videoView = null;
@@ -68,6 +73,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 		functions.put("pauseCurrentVideo", new PauseVideoFunction());
 		functions.put("resumeVideo", new ResumeVideoFunction());
 		functions.put("cleanUp", new CleanUpFunction());
+		functions.put("prepareToPlay", new PrepareToPlayFunction());
 		return functions;
 	}
 	
@@ -101,9 +107,23 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 			_videoView.setZOrderOnTop(true);
 			_videoView.setMediaController(new MediaController(getActivity()));
 			_videoView.setOnCompletionListener(this);
+			_videoView.setOnPreparedListener(this);
 		}
 		return _videoView;
 	}
+	
+	@Override
+	public void onCompletion(MediaPlayer mp)
+	{
+		dispatchStatusEventAsync("PLAYBACK_DID_FINISH", "OK");
+	}
+
+	
+	@Override
+	public void onPrepared(MediaPlayer mp) {
+		dispatchStatusEventAsync("READY_TO_DISPLAY", "OK");
+	}
+
 	
 	private HashMap<String, byte[]> videosData = null;
 	
@@ -127,10 +147,6 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 		return videosData.get(Integer.toString(position));
 	}
 	
-	public void onCompletion(MediaPlayer mp)
-	{
-		dispatchStatusEventAsync("PLAYBACK_DID_FINISH", "OK");
-	}
 	
 	public void setStyle(int style)
 	{
@@ -173,10 +189,23 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	
 	public void showPlayer()
 	{
+		if (_videoContainer != null)
+		{
+			_videoContainer.setVisibility(View.VISIBLE);
+		} else
+		{
+			createPlayer();
+			showPlayer();
+		}
+	}
+	
+	public void createPlayer()
+	{
 		ViewGroup rootContainer = getRootContainer();
 		ViewGroup videoContainer = getVideoContainer();
 		rootContainer.addView(videoContainer, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, Gravity.TOP));
 		updateStyle();
+		videoContainer.setVisibility(View.INVISIBLE);
 	}
 	
 	public void hidePlayer()
@@ -184,7 +213,6 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 		ViewGroup rootContainer = getRootContainer();
 		ViewGroup videoContainer = getVideoContainer();
 		rootContainer.removeView(videoContainer);
-
 	}
 	
 	public void disposeVideo()
@@ -202,4 +230,5 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	{
 		videosData = null;
 	}
+
 }

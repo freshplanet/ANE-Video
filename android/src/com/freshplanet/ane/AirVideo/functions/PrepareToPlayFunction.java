@@ -8,17 +8,16 @@ import com.adobe.fre.FREObject;
 import com.freshplanet.ane.AirVideo.CreateFileTask;
 import com.freshplanet.ane.AirVideo.Extension;
 
-public class PlayVideoFunction implements FREFunction {
+public class PrepareToPlayFunction implements FREFunction {
 
-	private static String TAG = "playVideo";
+	private static String TAG = "PrepareToPlay";
 	
 	@Override
-	public FREObject call(FREContext arg0, FREObject[] args) {
-
+	public FREObject call(FREContext arg0, FREObject[] arg1) {
 		int position = 0;
 		try
 		{
-			position = args[0].getAsInt();
+			position = arg1[0].getAsInt();
 		}
 		catch (Exception e)
 		{
@@ -26,8 +25,11 @@ public class PlayVideoFunction implements FREFunction {
 			return null;
 		}
 		
-		Extension.context.showPlayer();
-		Extension.context.getVideoView().start();
+		Log.d(TAG, "fetching stream");
+		byte[] input = Extension.context.getStreamAtPosition(position);
+		CreateFileTask task = new CreateFileTask();
+		task.execute(input);
+		Log.d(TAG, "reading file");
 		return null;
 	}
 

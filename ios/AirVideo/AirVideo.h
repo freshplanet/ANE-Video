@@ -21,11 +21,13 @@
 
 @interface AirVideo : NSObject
 {
+    NSInteger currentVideoPosition;
     NSMutableDictionary* videosData;
     CGRect  requestedFrame;
 }
 @property (nonatomic, readonly) MPMoviePlayerController *player;
 @property (nonatomic, retain) NSMutableDictionary* videosData;
+@property (nonatomic) NSInteger currentVideoPosition;
 @property (nonatomic, assign) CGRect requestedFrame;
 
 
@@ -49,7 +51,7 @@ DEFINE_ANE_FUNCTION(bufferVideos);
 DEFINE_ANE_FUNCTION(pauseCurrentVideo);
 DEFINE_ANE_FUNCTION(resumeVideo);
 DEFINE_ANE_FUNCTION(cleanUp);
-
+DEFINE_ANE_FUNCTION(prepareToPlay);
 
 // ANE Setup
 void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet);

@@ -23,17 +23,17 @@
 FREContext AirVideoCtx = nil;
 
 @interface AirVideo ()
-
 - (void)playerLoadStateDidChange:(NSNotification *)notification;
 - (void)playerPlaybackDidFinish:(NSNotification *)notification;
-- (void)playerMovieDidChange:(NSNotification *)notification;
+- (void)playerMovieReadyForDisplay:(NSNotification*)notification;
 - (void)resizeVideo;
 - (void)startBuffering:(NSArray*)urls;
 - (void)pauseVideo;
 - (void)resume:(int)playBackTime;
 - (void)cleanUp;
 - (void)setRetinaValue:(double)value;
-
+- (void)playForPosition:(NSInteger)position;
+- (void)prepareToPlay:(NSInteger)position;
 @end
 
 @implementation AirVideo
@@ -41,6 +41,7 @@ FREContext AirVideoCtx = nil;
 @synthesize player = _player;
 @synthesize videosData;
 @synthesize requestedFrame = CGRectNull;
+@synthesize currentVideoPosition;
 
 #pragma mark - Singleton
 
@@ -53,6 +54,7 @@ bool isRetina;
     if (sharedInstance == nil)
     {
         sharedInstance = [[super allocWithZone:NULL] init];
+        [sharedInstance setCurrentVideoPosition:-1];
     }
     
     return sharedInstance;
@@ -93,8 +95,7 @@ bool isRetina;
         // Register for notifications
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerLoadStateDidChange:) name:MPMoviePlayerLoadStateDidChangeNotification object:_player];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerPlaybackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:_player];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerMovieDidChange:) name:MPMediaPlaybackIsPreparedToPlayDidChangeNotification object:_player];
-
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerMovieReadyForDisplay:) name:MPMoviePlayerReadyForDisplayDidChangeNotification object:_player];
     }
     
     return _player;
@@ -138,14 +139,6 @@ bool isRetina;
     
     if (self.player.loadState == (MPMovieLoadStatePlayable | MPMovieLoadStatePlaythroughOK) || self.player.loadState == MPMovieLoadStatePlayable || self.player.loadState == MPMovieLoadStatePlaythroughOK)
     {
-        UIView *rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
-        
-        // Resize player
-        CGSize movieSize = self.player.naturalSize;
-        CGRect playerFrame = self.player.view.frame;
-        playerFrame.size.width = MIN(rootView.frame.size.width, movieSize.width);
-        playerFrame.size.height = playerFrame.size.width * movieSize.height / movieSize.width;
-        self.player.view.frame = playerFrame;
         [self resizeVideo];
     }
 }
@@ -155,31 +148,32 @@ bool isRetina;
     [AirVideo dispatchEvent:@"PLAYBACK_DID_FINISH" withInfo:@"OK"];
 }
 
-- (void)playerMovieDidChange:(NSNotification *)notification
+- (void)playerMovieReadyForDisplay:(NSNotification *)notification
 {
-    [self.player.view setHidden:NO];
+    [AirVideo dispatchEvent:@"READY_TO_DISPLAY" withInfo:@"OK"];
 }
 
 - (void)resizeVideo
 {
-    NSLog(@"[resizeVideo]");
-
-    NSLog(@"%@",NSStringFromCGRect([[AirVideo sharedInstance] requestedFrame]));
-
     
     if (self.player != nil && self.player.view != nil && !CGRectIsNull(self.requestedFrame))
     {
+        CGRect finalRect;
         // Resize player
-        if (isRetina) {
-            CGRect retinaRect = CGRectMake(CGRectGetMinX(self.requestedFrame)/2, CGRectGetMinY(self.requestedFrame)/2, CGRectGetWidth(self.requestedFrame)/2, CGRectGetHeight(self.requestedFrame)/2);
-            self.player.view.frame = retinaRect;
-        } else
+        finalRect = !isRetina ? [self requestedFrame] : CGRectMake(CGRectGetMinX(self.requestedFrame)/2, CGRectGetMinY(self.requestedFrame)/2, CGRectGetWidth(self.requestedFrame)/2, CGRectGetHeight(self.requestedFrame)/2);
+        
+        // set the size only if needed
+        if (!CGRectEqualToRect(finalRect, self.player.view.frame))
         {
-            self.player.view.frame = [self requestedFrame];
+            NSLog(@"[resizeVideo]");            
+            NSLog(@"%@",NSStringFromCGRect([[AirVideo sharedInstance] requestedFrame]));
+
+            // will dispatch video ready to display event
+            self.player.view.frame = finalRect;
         }
+
     }
 }
-
 
 -(void)startBuffering:(NSArray*)urls
 {
@@ -189,27 +183,11 @@ bool isRetina;
     for (NSString *url in urls) {
         NSLog(@"buffering for url %@", url);
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-        
         RequestDelegate *requestDelegate = [[[RequestDelegate alloc] initWithVideo:self forPosition:i] autorelease];
-        
         [NSURLConnection connectionWithRequest:request delegate:requestDelegate];
-        
-        
-//        [NSURLConnection sendAsynchronousRequest:request
-//                                           queue:[NSOperationQueue mainQueue]
-//                               completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-//                                   NSLog(@"request received");
-//                                   NSLog(@"response: %@", [response MIMEType]);
-//                                   NSLog(@"data length: %i", [data length]);
-//                                   NSLog(@"error %@", error);
-//                                   [[AirVideo sharedInstance] storeVideoData:data atPosition:i];
-//                               }];
         i++;
     }
 }
-
-
-
 
 -(void)storeVideoData:(NSData*)data atPosition:(NSInteger)position
 {
@@ -231,10 +209,19 @@ bool isRetina;
     [AirVideo dispatchEvent:@"LOAD_STATE_COMPLETE" withInfo:[NSString stringWithFormat:@"%i", position]];
 }
 
-
 -(void)playForPosition:(NSInteger)position
 {
+    if (currentVideoPosition != position)
+    {
+        [self prepareToPlay:position];
+    }
     
+    [[self player] play];
+    [self.player.view setHidden:NO];
+}
+
+-(void)prepareToPlay:(NSInteger)position
+{
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *path = [documentsDirectory stringByAppendingPathComponent:@"myMove.mp4"];
@@ -242,16 +229,26 @@ bool isRetina;
     NSData *videoData = [[self videosData] objectForKey:[NSString stringWithFormat:@"%i", position]];
     if (videoData != nil)
     {
+        currentVideoPosition = position;
         NSLog(@"videoData found at position %i", position);
         [videoData writeToFile:path atomically:YES];
         NSURL *moveUrl = [NSURL fileURLWithPath:path];
-        [[[AirVideo sharedInstance] player] setContentURL:moveUrl];
-        [[[AirVideo sharedInstance] player] prepareToPlay];
+        
+        if (self.player.isPreparedToPlay)
+        {
+            [[self player] stop];
+        }
+
+        [[self player] setShouldAutoplay:NO];
+        [[self player] setContentURL:moveUrl];
+        [[self player] prepareToPlay];
+        
+
+        NSLog(@"is prepared to play %@", self.player.isPreparedToPlay ? @"YES" : @"NO");
     } else
     {
         NSLog(@"videoData not found at position %i", position);
     }
-    
 }
 
 -(void)pauseVideo
@@ -268,7 +265,6 @@ bool isRetina;
     [self.player setInitialPlaybackTime:playBackTime/1000.0];
     [self.player play];
     [self.player.view setHidden:NO];
-
 }
 
 -(void)cleanUp
@@ -278,6 +274,7 @@ bool isRetina;
         data = nil;
         [data release];
     }
+    currentVideoPosition = -1;
     self.videosData = nil;
 }
 
@@ -440,7 +437,6 @@ DEFINE_ANE_FUNCTION(setControlStyle)
     return nil;
 }
 
-
 DEFINE_ANE_FUNCTION(playVideo)
 {
     NSLog(@"play Video");
@@ -463,8 +459,6 @@ DEFINE_ANE_FUNCTION(pauseCurrentVideo)
     [[AirVideo sharedInstance] pauseVideo];
     return nil;
 }
-
-
 
 DEFINE_ANE_FUNCTION(bufferVideos)
 {
@@ -519,6 +513,23 @@ DEFINE_ANE_FUNCTION(cleanUp)
 }
 
 
+DEFINE_ANE_FUNCTION(prepareToPlay)
+{
+    NSLog(@"prepare Video");
+    int32_t value;
+    if (FREGetObjectAsInt32(argv[0], &value) == FRE_OK)
+    {
+        NSLog(@"preparing for position %i", value);
+        [[AirVideo sharedInstance] prepareToPlay:value];
+    } else
+    {
+        NSLog(@"couldnt parse position");
+    }
+    
+    return nil;
+}
+
+
 
 
 void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,
@@ -528,7 +539,7 @@ void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     NSLog(@"[AirVideoContextInitializer]");
     
     // Register the links btwn AS3 and ObjC. (dont forget to modify the nbFuntionsToLink integer if you are adding/removing functions)
-    NSInteger nbFuntionsToLink = 10;
+    NSInteger nbFuntionsToLink = 11;
     *numFunctionsToTest = nbFuntionsToLink;
     
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * nbFuntionsToLink);
@@ -573,6 +584,9 @@ void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     func[9].functionData = NULL;
     func[9].function = &cleanUp;
 
+    func[10].name = (const uint8_t*) "prepareToPlay";
+    func[10].functionData = NULL;
+    func[10].function = &prepareToPlay;
     
     *functionsToSet = func;
     

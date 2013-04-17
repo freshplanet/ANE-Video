@@ -184,7 +184,16 @@ package com.freshplanet.ane.AirVideo
 		}
 		
 		
-		
+		public function prepareToPlay(position:int):void
+		{
+			if (!isSupported)
+			{
+				this.dispatchEvent(new AirVideoEvent(AirVideoEvent.READY_TO_DISPLAY, position));
+			} else
+			{
+				_context.call("prepareToPlay", position);
+			}
+		}
 		
 		
 		
@@ -279,18 +288,26 @@ package com.freshplanet.ane.AirVideo
 		
 		private function onStatus( event : StatusEvent ) : void
 		{
-			if (event.code == "LOAD_STATE_COMPLETE")
+			switch(event.code)
 			{
-				this.dispatchEvent(new AirVideoEvent(AirVideoEvent.LOAD_STATE_COMPLETE, parseInt(event.level)));
-			}
-			else if (event.code == "PLAYBACK_DID_FINISH")
-			{
-				this.dispatchEvent(new AirVideoEvent(AirVideoEvent.DID_FINISH_PLAYING));
-				next();
-			}
-			else if (event.code == "LOGGING") // Simple log message
-			{
-				log(event.level);
+				case "LOAD_STATE_COMPLETE":
+					this.dispatchEvent(new AirVideoEvent(AirVideoEvent.LOAD_STATE_COMPLETE, parseInt(event.level)));
+					break;
+				case "PLAYBACK_DID_FINISH":
+					this.dispatchEvent(new AirVideoEvent(AirVideoEvent.DID_FINISH_PLAYING));
+					next();
+					break;
+				case "ERROR":
+					this.dispatchEvent(new AirVideoEvent(AirVideoEvent.ERROR, 0, event.level));
+					break;
+				case "LOGGING":
+					log(event.level);
+					break;
+				case "READY_TO_DISPLAY":
+					this.dispatchEvent(new AirVideoEvent(AirVideoEvent.READY_TO_DISPLAY));
+					break;
+				default:
+					log("Unrecognized event code: "+event.code);
 			}
 		}
 		
