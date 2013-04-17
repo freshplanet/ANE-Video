@@ -114,6 +114,7 @@ public class CreateFileTask extends AsyncTask<byte[], Integer, String> {
 			{
 				Log.d(TAG, "seeking to "+Integer.toString(mTimePosition));
 				Extension.context.getVideoView().seekTo(mTimePosition);
+				Extension.context.getVideoView().start();
 			}
 			Extension.context.createPlayer();
 		} catch (Exception e)
