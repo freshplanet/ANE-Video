@@ -92,6 +92,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 			if (videoLayoutParams == null)
 			{
 				videoLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+				videoLayoutParams.gravity = Gravity.CENTER;
 			}
 			_videoContainer.addView(getVideoView(), videoLayoutParams);
 		}
@@ -168,13 +169,15 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 
 	}
 	
+	private FrameLayout.LayoutParams videoContainerLayoutParams;
+	
 	public void setViewDimensions(double x, double y, double width, double height)
 	{
-		videoLayoutParams = new FrameLayout.LayoutParams((int) width, (int)height);
-		videoLayoutParams.gravity = Gravity.LEFT | Gravity.TOP;
-		videoLayoutParams.leftMargin = (int) x;
-		videoLayoutParams.topMargin = (int) y;
-		getVideoView().setLayoutParams(videoLayoutParams);
+		videoContainerLayoutParams = new FrameLayout.LayoutParams((int) width, (int)height);
+		videoContainerLayoutParams.gravity = Gravity.LEFT | Gravity.TOP;
+		videoContainerLayoutParams.leftMargin = (int) x;
+		videoContainerLayoutParams.topMargin = (int) y;
+		getVideoContainer().setLayoutParams(videoLayoutParams);
 	}
 	
 	public void pauseVideo()
@@ -203,7 +206,13 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	{
 		ViewGroup rootContainer = getRootContainer();
 		ViewGroup videoContainer = getVideoContainer();
-		rootContainer.addView(videoContainer, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, Gravity.TOP));
+		if (videoContainerLayoutParams != null)
+		{
+			rootContainer.addView(videoContainer, videoContainerLayoutParams);
+		} else
+		{
+			rootContainer.addView(videoContainer, new FrameLayout.LayoutParams(200, 200, Gravity.TOP));
+		}
 		updateStyle();
 		videoContainer.setVisibility(View.INVISIBLE);
 	}
