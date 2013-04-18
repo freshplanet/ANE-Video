@@ -420,11 +420,10 @@ DEFINE_ANE_FUNCTION(setControlStyle)
     int32_t value;
     if (FREGetObjectAsInt32(argv[0], &value) == FRE_OK)
     {
-        NSLog(@"playing for position %i", value);
-        [[AirVideo sharedInstance] playForPosition:value];
+        NSLog(@"setting control style %i", value);
     } else
     {
-        NSLog(@"couldnt parse position");
+        NSLog(@"couldnt parse control style");
     }
     if (value == 0)
     {
