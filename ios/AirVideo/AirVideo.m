@@ -95,7 +95,7 @@ bool isRetina;
         // Register for notifications
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerLoadStateDidChange:) name:MPMoviePlayerLoadStateDidChangeNotification object:_player];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerPlaybackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:_player];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerMovieReadyForDisplay:) name:MPMoviePlayerReadyForDisplayDidChangeNotification object:_player];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerMovieReadyForDisplay:) name:MPMediaPlaybackIsPreparedToPlayDidChangeNotification object:_player];
     }
     
     return _player;
@@ -380,7 +380,7 @@ DEFINE_ANE_FUNCTION(setViewDimensions)
     
     NSLog(@"%@",NSStringFromCGRect([[AirVideo sharedInstance] requestedFrame]));
     
-    [[AirVideo sharedInstance] resizeVideo];
+//    [[AirVideo sharedInstance] resizeVideo];
     return nil;
 }
 

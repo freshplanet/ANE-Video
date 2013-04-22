@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A20D842171F9A7600498D01 /* RequestDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A20D840171F9A7600498D01 /* RequestDelegate.h */; };
+		5A20D843171F9A7600498D01 /* RequestDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A20D841171F9A7600498D01 /* RequestDelegate.m */; };
 		5A98569C15213BC3003A8EB0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A98569B15213BC3003A8EB0 /* Foundation.framework */; };
 		FA8DA7FE16A46CB200CE1D10 /* AirVideo-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = FA8DA7FB16A46CB200CE1D10 /* AirVideo-Prefix.pch */; };
 		FA8DA7FF16A46CB200CE1D10 /* AirVideo.h in Headers */ = {isa = PBXBuildFile; fileRef = FA8DA7FC16A46CB200CE1D10 /* AirVideo.h */; };
@@ -17,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5A20D840171F9A7600498D01 /* RequestDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestDelegate.h; sourceTree = "<group>"; };
+		5A20D841171F9A7600498D01 /* RequestDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestDelegate.m; sourceTree = "<group>"; };
 		5A98569815213BC3003A8EB0 /* libAirVideo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAirVideo.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A98569B15213BC3003A8EB0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FA8DA7FB16A46CB200CE1D10 /* AirVideo-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AirVideo-Prefix.pch"; sourceTree = "<group>"; };
@@ -72,6 +76,8 @@
 			isa = PBXGroup;
 			children = (
 				FA8DA7FC16A46CB200CE1D10 /* AirVideo.h */,
+				5A20D840171F9A7600498D01 /* RequestDelegate.h */,
+				5A20D841171F9A7600498D01 /* RequestDelegate.m */,
 				FA8DA7FD16A46CB200CE1D10 /* AirVideo.m */,
 				FA8DA80516A46CFF00CE1D10 /* Supporting Files */,
 			);
@@ -97,6 +103,7 @@
 				FA8DA7FE16A46CB200CE1D10 /* AirVideo-Prefix.pch in Headers */,
 				FA8DA7FF16A46CB200CE1D10 /* AirVideo.h in Headers */,
 				FA8DA80716A46D4500CE1D10 /* FlashRuntimeExtensions.h in Headers */,
+				5A20D842171F9A7600498D01 /* RequestDelegate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,6 +158,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA8DA80016A46CB200CE1D10 /* AirVideo.m in Sources */,
+				5A20D843171F9A7600498D01 /* RequestDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
