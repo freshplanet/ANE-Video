@@ -23,14 +23,11 @@ import java.util.Map;
 
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
-import android.media.MediaPlayer.OnPreparedListener;
-import android.opengl.Visibility;
-import android.provider.MediaStore.Video.VideoColumns;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -48,7 +45,7 @@ import com.freshplanet.ane.AirVideo.functions.SetControlStyleFunction;
 import com.freshplanet.ane.AirVideo.functions.SetViewDimensionsFunction;
 import com.freshplanet.ane.AirVideo.functions.ShowPlayerFunction;
 
-public class ExtensionContext extends FREContext implements OnCompletionListener, OnPreparedListener
+public class ExtensionContext extends FREContext implements OnCompletionListener
 {
 	
 	private VideoView _videoView = null;
@@ -108,7 +105,20 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 			_videoView.setZOrderOnTop(true);
 			_videoView.setMediaController(new MediaController(getActivity()));
 			_videoView.setOnCompletionListener(this);
-			_videoView.setOnPreparedListener(this);
+			_videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+				@Override
+				public boolean onError(MediaPlayer mp, int what, int extra) {
+			    	Log.d("test", "Error : "+Integer.toString(what));
+					return false;
+				}
+			});
+			_videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+			    @Override
+			    public void onPrepared(MediaPlayer arg0) {
+			    	Log.d("test", "ready to be displayed");
+					dispatchStatusEventAsync("READY_TO_DISPLAY", "OK");
+			    }
+			});
 		}
 		return _videoView;
 	}
@@ -118,13 +128,6 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	{
 		dispatchStatusEventAsync("PLAYBACK_DID_FINISH", "OK");
 	}
-
-	
-	@Override
-	public void onPrepared(MediaPlayer mp) {
-		dispatchStatusEventAsync("READY_TO_DISPLAY", "OK");
-	}
-
 	
 	private HashMap<String, byte[]> videosData = null;
 	
@@ -202,8 +205,11 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 		}
 	}
 	
+	private static String TAG = "ExtenstionCon";
+	
 	public void createPlayer()
 	{
+		Log.d(TAG, "creating player");
 		ViewGroup rootContainer = getRootContainer();
 		ViewGroup videoContainer = getVideoContainer();
 		if (videoContainerLayoutParams != null)
@@ -215,6 +221,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 		}
 		updateStyle();
 		videoContainer.setVisibility(View.INVISIBLE);
+		Log.d(TAG, "set visibility");
 	}
 	
 	public void hidePlayer()

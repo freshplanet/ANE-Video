@@ -106,7 +106,6 @@ public class CreateFileTask extends AsyncTask<byte[], Integer, String> {
 	@Override
     protected void onPostExecute(String result) {
 		Log.d(TAG, "setting the video param");
-		Log.d(TAG, "starting the video");
 		try
 		{
 			Extension.context.getVideoView().setVideoURI(Uri.parse(filePath));
@@ -117,6 +116,13 @@ public class CreateFileTask extends AsyncTask<byte[], Integer, String> {
 				Extension.context.getVideoView().start();
 			}
 			Extension.context.createPlayer();
+			if (android.os.Build.VERSION.SDK_INT < 14)
+			{
+				Log.d(TAG, "froyo detected");
+//				Extension.context.getVideoView().start();
+//				Extension.context.getVideoView().pause();
+				Extension.context.dispatchStatusEventAsync("READY_TO_DISPLAY", "OK");
+			}
 		} catch (Exception e)
 		{
 			Log.e(TAG, "exception occured");
