@@ -92,11 +92,11 @@ package com.freshplanet.ane.AirVideo
 		 * If another video is currently being played, it will stop. If there are videos in the queue,
 		 * they will remain in the queue to be played after this new video is played.
 		 */
-		public function loadVideo( url : String ) : void
+		public function loadVideo( url : String, isLocalFile:Boolean = false ) : void
 		{
 			if (!isSupported) return;
 			
-			_context.call("loadVideo", url);
+			_context.call("loadVideo", url, isLocalFile);
 			setCurrentVideo(url);
 		}
 		

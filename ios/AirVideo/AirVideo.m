@@ -148,9 +148,18 @@ DEFINE_ANE_FUNCTION(loadVideo)
         url = [NSString stringWithUTF8String:(const char *)urlString];
     }
     
+    uint32_t isLocalFileValue;
+    FREObject isLocalFileObj = argv[1];
+    FREGetObjectAsBool(isLocalFileObj, &isLocalFileValue);
+    BOOL isLocalFile = (isLocalFileValue != 0);
+    
     if (url)
     {
-        [[[AirVideo sharedInstance] player] setContentURL:[NSURL URLWithString:url]];
+        if (!isLocalFile) {
+            [[[AirVideo sharedInstance] player] setContentURL:[NSURL fileURLWithPath:url]];
+        } else {
+            [[[AirVideo sharedInstance] player] setContentURL:[NSURL URLWithString:url]];
+        }
         [[[AirVideo sharedInstance] player] play];
     }
     
