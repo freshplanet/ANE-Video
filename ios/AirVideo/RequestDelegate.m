@@ -22,7 +22,8 @@
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    
+    NSLog(@"connection failed with error");
+    [AirVideo dispatchEvent:@"ERROR" withInfo:[error description]];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
@@ -32,8 +33,14 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
+    NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
     [receivedData setLength:0];
-
+    if (httpResponse.statusCode != 200)
+    {
+        NSLog(@"connection failed with error");
+        NSString *info = [NSString stringWithFormat:@"%i", httpResponse.statusCode];
+        [AirVideo dispatchEvent:@"ERROR" withInfo:info];
+    }
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection

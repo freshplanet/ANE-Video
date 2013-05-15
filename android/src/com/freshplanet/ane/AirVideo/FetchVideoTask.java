@@ -18,6 +18,7 @@ public class FetchVideoTask extends AsyncTask<URL, Integer, Long> {
 		mPosition = position;
 	}
 
+	private Boolean downloadSuccess;
 	
 	@Override
 	protected Long doInBackground(URL... urls) {
@@ -39,9 +40,10 @@ public class FetchVideoTask extends AsyncTask<URL, Integer, Long> {
 
 	        buffer.flush();
 	        mVideoBytes = buffer.toByteArray();
-	        
+	        downloadSuccess = true;
 		} catch (IOException e) {
 			e.printStackTrace();
+			downloadSuccess = false;
 		}
 		return null;
 	}
@@ -50,8 +52,14 @@ public class FetchVideoTask extends AsyncTask<URL, Integer, Long> {
     protected void onPostExecute(Long result) {
 		if (Extension.context != null)
 		{
-			Extension.context.dispatchStatusEventAsync("LOAD_STATE_COMPLETE", Integer.toString(mPosition));
-			Extension.context.setStreamAtPosition(mVideoBytes, mPosition);
+			if (downloadSuccess)
+			{
+				Extension.context.dispatchStatusEventAsync("LOAD_STATE_COMPLETE", Integer.toString(mPosition));
+				Extension.context.setStreamAtPosition(mVideoBytes, mPosition);
+			} else
+			{
+				Extension.context.dispatchStatusEventAsync("ERROR", "download error");
+			}
 		}
 	}
 
