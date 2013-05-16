@@ -98,6 +98,7 @@ static AirVideo *sharedInstance = nil;
 {
     if (self.player.loadState == MPMovieLoadStatePlayable)
     {
+        [AirVideo log:@"playerLoadStateDidChange = MPMovieLoadStatePlayable"];
         UIView *rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
         
         // Resize player
@@ -110,11 +111,31 @@ static AirVideo *sharedInstance = nil;
         // Center player
         self.player.view.center = rootView.center;
     }
+    else if (self.player.loadState == MPMovieLoadStateUnknown)
+    {
+        [AirVideo log:@"playerLoadStateDidChange = MPMovieLoadStateUnknown"];
+    }
+    else if (self.player.loadState == MPMovieLoadStatePlaythroughOK)
+    {
+        [AirVideo log:@"playerLoadStateDidChange = MPMovieLoadStatePlaythroughOK"];
+    }
+    else if (self.player.loadState == MPMovieLoadStateStalled)
+    {
+        [AirVideo log:@"playerLoadStateDidChange = MPMovieLoadStateStalled"];
+    }    
 }
 
 - (void)playerPlaybackDidFinish:(NSNotification *)notification
 {
-    [AirVideo dispatchEvent:@"PLAYBACK_DID_FINISH" withInfo:@"OK"];
+    if ([notification.userInfo objectForKey:@"error"] != nil)
+    {
+        NSError *playbackFinishedError = [notification.userInfo objectForKey:@"error"];
+        [AirVideo log:[NSString stringWithFormat:@"playbackFinishedError.  Error: %@",playbackFinishedError]];
+    }
+    else
+    {
+        [AirVideo dispatchEvent:@"PLAYBACK_DID_FINISH" withInfo:@"OK"];
+    }
 }
 
 @end
