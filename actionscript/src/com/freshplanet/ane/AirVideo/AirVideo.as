@@ -88,14 +88,17 @@ package com.freshplanet.ane.AirVideo
 		
 		/**
 		 * Load and play a given video URL.<br><br>
-		 * 
+		 *
 		 * If another video is currently being played, it will stop. If there are videos in the queue,
 		 * they will remain in the queue to be played after this new video is played.
+		 * 
+		 * @param url the url of the video.  it can be a local file on the device.
+		 * @param isLocalFile set this flag to true when playing a video stored locally, not on the web. default value is false
 		 */
 		public function loadVideo( url : String, isLocalFile:Boolean = false ) : void
 		{
 			if (!isSupported) return;
-			
+
 			_context.call("loadVideo", url, isLocalFile);
 			setCurrentVideo(url);
 		}

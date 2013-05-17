@@ -96,9 +96,24 @@ static AirVideo *sharedInstance = nil;
 
 - (void)playerLoadStateDidChange:(NSNotification *)notification
 {
-    if (self.player.loadState == MPMovieLoadStatePlayable)
+    if (self.player.loadState == MPMovieLoadStateUnknown)
+    {
+        [AirVideo log:@"playerLoadStateDidChange = MPMovieLoadStateUnknown"];
+    } else if (self.player.loadState == MPMovieLoadStatePlaythroughOK)
+    {
+        [AirVideo log:@"playerLoadStateDidChange = MPMovieLoadStatePlaythroughOK"];
+    } else if (self.player.loadState == MPMovieLoadStateStalled)
+    {
+        [AirVideo log:@"playerLoadStateDidChange = MPMovieLoadStateStalled"];
+    } else if (self.player.loadState == MPMovieLoadStatePlayable)
     {
         [AirVideo log:@"playerLoadStateDidChange = MPMovieLoadStatePlayable"];
+    } else {
+        [AirVideo log:[NSString stringWithFormat:@"playerLoadStateDidChange unknown state = %i", self.player.loadState]];
+    }
+    
+    if (self.player.loadState == (MPMovieLoadStatePlayable | MPMovieLoadStatePlaythroughOK) || self.player.loadState == MPMovieLoadStatePlayable || self.player.loadState == MPMovieLoadStatePlaythroughOK)
+    {
         UIView *rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
         
         // Resize player
@@ -111,18 +126,7 @@ static AirVideo *sharedInstance = nil;
         // Center player
         self.player.view.center = rootView.center;
     }
-    else if (self.player.loadState == MPMovieLoadStateUnknown)
-    {
-        [AirVideo log:@"playerLoadStateDidChange = MPMovieLoadStateUnknown"];
-    }
-    else if (self.player.loadState == MPMovieLoadStatePlaythroughOK)
-    {
-        [AirVideo log:@"playerLoadStateDidChange = MPMovieLoadStatePlaythroughOK"];
-    }
-    else if (self.player.loadState == MPMovieLoadStateStalled)
-    {
-        [AirVideo log:@"playerLoadStateDidChange = MPMovieLoadStateStalled"];
-    }    
+
 }
 
 - (void)playerPlaybackDidFinish:(NSNotification *)notification
@@ -162,11 +166,11 @@ DEFINE_ANE_FUNCTION(loadVideo)
 {
     uint32_t stringLength;
     
-    NSString *url = nil;
-    const uint8_t *urlString;
-    if (FREGetObjectAsUTF8(argv[0], &stringLength, &urlString) == FRE_OK)
+    NSString *path = nil;
+    const uint8_t *pathString;
+    if (FREGetObjectAsUTF8(argv[0], &stringLength, &pathString) == FRE_OK)
     {
-        url = [NSString stringWithUTF8String:(const char *)urlString];
+        path = [NSString stringWithUTF8String:(const char *)pathString];
     }
     
     uint32_t isLocalFileValue;
@@ -174,13 +178,22 @@ DEFINE_ANE_FUNCTION(loadVideo)
     FREGetObjectAsBool(isLocalFileObj, &isLocalFileValue);
     BOOL isLocalFile = (isLocalFileValue != 0);
     
-    if (url)
+    NSURL *url;
+    if (path)
     {
-        if (!isLocalFile) {
-            [[[AirVideo sharedInstance] player] setContentURL:[NSURL fileURLWithPath:url]];
-        } else {
-            [[[AirVideo sharedInstance] player] setContentURL:[NSURL URLWithString:url]];
+        if (isLocalFile) {
+            url = [NSURL fileURLWithPath:path isDirectory:NO];
+            NSError *unreachableFile;
+            if ( [url checkResourceIsReachableAndReturnError:&unreachableFile] == NO )
+            {
+                [AirVideo log:[NSString stringWithFormat:@"FileUnreachableError. Error: %@",unreachableFile]];
+                return nil;
+            }
         }
+        else {
+            url = [NSURL URLWithString:path];
+        }
+        [[[AirVideo sharedInstance] player] setContentURL:url];
         [[[AirVideo sharedInstance] player] play];
     }
     
