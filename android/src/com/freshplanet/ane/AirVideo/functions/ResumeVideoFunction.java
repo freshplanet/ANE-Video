@@ -41,9 +41,14 @@ public class ResumeVideoFunction implements FREFunction {
 		
 		byte[] input = Extension.context.getStreamAtPosition(position);
 		CreateFileTask task = new CreateFileTask();
-		task.setParams(position, timePosition);
+		task.setParams(position, timePosition, arg0.getActivity().getCacheDir());
+		// delete previous file first
+		String previousFileName = task.getPreviousFileName();
+		if (previousFileName != null)
+		{
+			arg0.getActivity().deleteFile(previousFileName);
+		}
 		task.execute(input);
-		
 		
 		return null;
 	}

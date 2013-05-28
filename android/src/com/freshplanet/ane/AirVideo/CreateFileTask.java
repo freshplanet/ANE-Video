@@ -14,12 +14,20 @@ public class CreateFileTask extends AsyncTask<byte[], Integer, String> {
 
 	private static String TAG = "CreateFileTask";
 	
-	private String filePath = null;
+	private static String mFileName = null;
+	private String mFilePath = null;
 	private int mTimePosition = 0;
+	private File mOutputDir = null;
 	
-	public void setParams(int position, int timePosition)
+	public void setParams(int position, int timePosition, File outputDir)
 	{
 		this.mTimePosition = timePosition;
+		mOutputDir = outputDir;
+	}
+	
+	public String getPreviousFileName()
+	{
+		return mFileName;
 	}
 	
 	
@@ -39,23 +47,22 @@ public class CreateFileTask extends AsyncTask<byte[], Integer, String> {
 			Log.d(TAG, "stream is null");
 			return null;
 		}
-
 		
 		ByteArrayInputStream input = new ByteArrayInputStream(bInput);
-		
 		
 		Log.d(TAG, "creating file");
 		File tempFile;
 		try {
-			tempFile = File.createTempFile("video", ".mp4");
+			tempFile = File.createTempFile("video", ".mp4", mOutputDir);
 		} catch (IOException e1) {
 			Log.e(TAG, "couldn't create tmp file");
 			e1.printStackTrace();
 			return null;
 		}
 		
-		filePath = tempFile.getAbsolutePath();
-		Log.d(TAG, "getting file temp: "+filePath);
+		mFilePath = tempFile.getAbsolutePath();
+		mFileName = tempFile.getName();
+		Log.d(TAG, "getting file temp: "+mFilePath);
 
 	    FileOutputStream out = null;
 		try {
@@ -108,7 +115,7 @@ public class CreateFileTask extends AsyncTask<byte[], Integer, String> {
 		Log.d(TAG, "setting the video param");
 		try
 		{
-			Extension.context.getVideoView().setVideoURI(Uri.parse(filePath));
+			Extension.context.getVideoView().setVideoURI(Uri.parse(mFilePath));
 			if (mTimePosition > 0)
 			{
 				Log.d(TAG, "seeking to "+Integer.toString(mTimePosition));

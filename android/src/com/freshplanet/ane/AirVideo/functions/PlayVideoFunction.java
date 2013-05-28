@@ -1,11 +1,8 @@
 package com.freshplanet.ane.AirVideo.functions;
 
-import android.util.Log;
-
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
-import com.freshplanet.ane.AirVideo.CreateFileTask;
 import com.freshplanet.ane.AirVideo.Extension;
 
 public class PlayVideoFunction implements FREFunction {
