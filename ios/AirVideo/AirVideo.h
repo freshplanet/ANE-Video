@@ -20,8 +20,12 @@
 #import <MediaPlayer/MediaPlayer.h>
 
 @interface AirVideo : NSObject
+{
+    CGRect requestedFrame;
+}
 
 @property (nonatomic, readonly) MPMoviePlayerController *player;
+@property (nonatomic, assign) CGRect requestedFrame;
 
 + (id)sharedInstance;
 

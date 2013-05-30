@@ -23,6 +23,7 @@ FREContext AirVideoCtx = nil;
 
 @interface AirVideo ()
 
+- (void)resize;
 - (void)playerLoadStateDidChange:(NSNotification *)notification;
 - (void)playerPlaybackDidFinish:(NSNotification *)notification;
 
@@ -31,6 +32,7 @@ FREContext AirVideoCtx = nil;
 @implementation AirVideo
 
 @synthesize player = _player;
+@synthesize requestedFrame = CGRectNull;
 
 #pragma mark - Singleton
 
@@ -73,6 +75,8 @@ static AirVideo *sharedInstance = nil;
         // Initializer movie player
         _player = [[MPMoviePlayerController alloc] init];
         
+        _player.scalingMode = MPMovieScalingModeAspectFit;
+        
         // Register for notifications
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerLoadStateDidChange:) name:MPMoviePlayerLoadStateDidChangeNotification object:_player];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerPlaybackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:_player];
@@ -114,19 +118,37 @@ static AirVideo *sharedInstance = nil;
     
     if (self.player.loadState == (MPMovieLoadStatePlayable | MPMovieLoadStatePlaythroughOK) || self.player.loadState == MPMovieLoadStatePlayable || self.player.loadState == MPMovieLoadStatePlaythroughOK)
     {
-        UIView *rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
-        
-        // Resize player
-        CGSize movieSize = self.player.naturalSize;
-        CGRect playerFrame = self.player.view.frame;
-        playerFrame.size.width = MIN(rootView.frame.size.width, movieSize.width);
-        playerFrame.size.height = playerFrame.size.width * movieSize.height / movieSize.width;
-        self.player.view.frame = playerFrame;
-        
-        // Center player
-        self.player.view.center = rootView.center;
+        [self resize];
     }
 
+}
+
+- (void) resize
+{
+    CGRect frame;
+    if ( CGRectIsNull(self.requestedFrame) )
+    {
+        UIView *rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
+        CGSize movieSize = self.player.naturalSize;
+        frame = self.player.view.frame;
+        
+        frame.size.width = MIN(rootView.frame.size.width, movieSize.width);
+        frame.size.height = frame.size.width * movieSize.height / movieSize.width;
+        self.player.view.frame = frame;
+        self.player.view.center = rootView.center;
+    }
+    else
+    {
+        if ( IS_RETINA ) {
+            frame = CGRectMake(CGRectGetMinX(self.requestedFrame)/2,
+                               CGRectGetMinY(self.requestedFrame)/2,
+                               CGRectGetWidth(self.requestedFrame)/2,
+                               CGRectGetHeight(self.requestedFrame)/2);
+        } else {
+            frame = self.requestedFrame;
+        }
+        self.player.view.frame = frame;
+    }
 }
 
 - (void)playerPlaybackDidFinish:(NSNotification *)notification
@@ -164,6 +186,7 @@ DEFINE_ANE_FUNCTION(hidePlayer)
 
 DEFINE_ANE_FUNCTION(loadVideo)
 {
+    NSLog(@"Entering loadVideo");
     uint32_t stringLength;
     
     NSString *path = nil;
@@ -178,15 +201,56 @@ DEFINE_ANE_FUNCTION(loadVideo)
     FREGetObjectAsBool(isLocalFileObj, &isLocalFileValue);
     BOOL isLocalFile = (isLocalFileValue != 0);
     
+    if (argc > 2)
+    {
+        double x;
+        double y;
+        double w;
+        double h;
+
+        if (FREGetObjectAsDouble(argv[2], &x) == FRE_OK) {
+            NSLog(@"x: %f", x);
+        } else {
+            NSLog(@"couldnt parse number");
+            return nil;
+        }
+        if (FREGetObjectAsDouble(argv[3], &y) == FRE_OK) {
+            NSLog(@"y: %f", y);
+        } else {
+            NSLog(@"couldnt parse number");
+            return nil;
+        }
+        if (FREGetObjectAsDouble(argv[4], &w) == FRE_OK) {
+            NSLog(@"width: %f", w);
+        } else {
+            NSLog(@"couldnt parse number");
+            return nil;
+        }
+        if (FREGetObjectAsDouble(argv[5], &h) == FRE_OK) {
+            NSLog(@"height: %f", h);
+        } else {
+            NSLog(@"couldnt parse number");
+            return nil;
+        }
+        [[AirVideo sharedInstance] setRequestedFrame:CGRectMake(x, y, w, h)];
+        NSLog(@"will resize video to %@", NSStringFromCGRect([[AirVideo sharedInstance]requestedFrame]));
+    } else {
+        [[AirVideo sharedInstance] setRequestedFrame:CGRectNull];
+    }
+    
+    NSLog(@"loadVideo path = %@, isLocalFile = %c", path, isLocalFile);
+    
     NSURL *url;
     if (path)
     {
         if (isLocalFile) {
             url = [NSURL fileURLWithPath:path isDirectory:NO];
-            NSError *unreachableFile;
-            if ( [url checkResourceIsReachableAndReturnError:&unreachableFile] == NO )
+            NSError *unreachableError;
+            if ( [url checkResourceIsReachableAndReturnError:&unreachableError] == NO )
             {
-                [AirVideo log:[NSString stringWithFormat:@"FileUnreachableError. Error: %@",unreachableFile]];
+                [AirVideo log:[NSString stringWithFormat:@"FileUnreachableError. Error: %@",unreachableError]];
+                NSLog(@"FileUnreachableError. Error: %@",unreachableError.localizedDescription);
+                NSLog(@"Exiting loadVideo");
                 return nil;
             }
         }
@@ -197,6 +261,7 @@ DEFINE_ANE_FUNCTION(loadVideo)
         [[[AirVideo sharedInstance] player] play];
     }
     
+    NSLog(@"Exiting loadVideo");
     return nil;
 }
 

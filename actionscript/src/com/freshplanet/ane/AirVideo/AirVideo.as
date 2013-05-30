@@ -6,6 +6,8 @@ package com.freshplanet.ane.AirVideo
 	import flash.external.ExtensionContext;
 	import flash.system.Capabilities;
 
+	import flash.geom.Rectangle;
+
 	public class AirVideo extends EventDispatcher
 	{
 		// --------------------------------------------------------------------------------------//
@@ -93,13 +95,20 @@ package com.freshplanet.ane.AirVideo
 		 * they will remain in the queue to be played after this new video is played.
 		 * 
 		 * @param url the url of the video.  it can be a local file on the device.
-		 * @param isLocalFile set this flag to true when playing a video stored locally, not on the web. default value is false
+		 * @param isLocalFile set this flag to true when playing a video stored locally, not on the web. 
+		 * default value is false
+		 * @param displayArea an area on the screen where the video will be displayed, measured from the top 
+		 * corner, in pixels.
 		 */
-		public function loadVideo( url : String, isLocalFile:Boolean = false ) : void
+		public function loadVideo( url : String, isLocalFile:Boolean = false, displayArea:Rectangle = null ) : void
 		{
 			if (!isSupported) return;
 
-			_context.call("loadVideo", url, isLocalFile);
+			if (displayArea)
+			{
+				_context.call("loadVideo", url, isLocalFile, displayArea.x, displayArea.y, displayArea.width, displayArea.height);
+
+			} else _context.call("loadVideo", url, isLocalFile);
 			setCurrentVideo(url);
 		}
 		
