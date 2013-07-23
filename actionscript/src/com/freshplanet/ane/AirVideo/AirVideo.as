@@ -112,6 +112,12 @@ package com.freshplanet.ane.AirVideo
 			setCurrentVideo(url);
 		}
 		
+		public function resizeVideo(displayArea:Rectangle) : void
+		{
+			if (!isSupported) return;
+			_context.call("resizeVideo", displayArea.x, displayArea.y, displayArea.width, displayArea.height);
+		}
+		
 		/**
 		 * Return an array containing the URLs of the videos currently in the queue. The video currently
 		 * played is not part of the queue.

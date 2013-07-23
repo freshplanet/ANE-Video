@@ -18,26 +18,26 @@
 
 package com.freshplanet.ane.AirVideo.functions;
 
-import android.net.Uri;
-
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
 import com.freshplanet.ane.AirVideo.Extension;
 
-public class LoadVideoFunction implements FREFunction
+public class ResizePlayerFunction implements FREFunction
 {
 	@Override
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		String url = null;
 		double x = 0;
 		double y = 0;
 		double width = 0;
 		double height = 0;
 		try
 		{
-			url = args[0].getAsString();
+			x = args[0].getAsDouble();
+			y = args[1].getAsDouble();
+			width = args[2].getAsDouble();
+			height = args[3].getAsDouble();
 		}
 		catch (Exception e)
 		{
@@ -45,27 +45,7 @@ public class LoadVideoFunction implements FREFunction
 			return null;
 		}
 		
-		Extension.context.getVideoView().setVideoURI(Uri.parse(url));
-		Extension.context.getVideoView().start();
-		
-		if(args.length == 6)
-		{
-			try
-			{
-				x = args[2].getAsDouble();
-				y = args[3].getAsDouble();
-				width = args[4].getAsDouble();
-				height = args[5].getAsDouble();
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				return null;
-			}
-			
-			Extension.context.setDisplayRect(x,y,width,height);
-		}
-		
+		Extension.context.setDisplayRect(x,y,width,height);
 		return null;
 	}
 }

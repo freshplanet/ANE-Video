@@ -39,7 +39,7 @@
 DEFINE_ANE_FUNCTION(showPlayer);
 DEFINE_ANE_FUNCTION(hidePlayer);
 DEFINE_ANE_FUNCTION(loadVideo);
-
+DEFINE_ANE_FUNCTION(resizeVideo);
 
 // ANE Setup
 void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet);

@@ -33,11 +33,12 @@ import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.freshplanet.ane.AirVideo.functions.HidePlayerFunction;
 import com.freshplanet.ane.AirVideo.functions.LoadVideoFunction;
+import com.freshplanet.ane.AirVideo.functions.ResizePlayerFunction;
 import com.freshplanet.ane.AirVideo.functions.ShowPlayerFunction;
 
 public class ExtensionContext extends FREContext implements OnCompletionListener
 {
-	private VideoView _videoView = null;
+	private ResizeVideoView _videoView = null;
 	private ViewGroup _videoContainer = null;
 	
 	@Override
@@ -51,6 +52,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 		functions.put("showPlayer", new ShowPlayerFunction());
 		functions.put("hidePlayer", new HidePlayerFunction());
 		functions.put("loadVideo", new LoadVideoFunction());
+		functions.put("resizeVideo", new ResizePlayerFunction());
 		
 		return functions;
 	}
@@ -71,17 +73,26 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 		return _videoContainer;
 	}
 	
-	public VideoView getVideoView()
+	public ResizeVideoView getVideoView()
 	{
 		if (_videoView == null)
 		{
-			_videoView = new VideoView(getActivity());
+			_videoView = new ResizeVideoView(getActivity());
 			_videoView.setZOrderOnTop(true);
 			_videoView.setMediaController(new MediaController(getActivity()));
 			_videoView.setOnCompletionListener(this);
 		}
 		
 		return _videoView;
+	}
+	
+	public void setDisplayRect(double x, double y, double width, double height)
+	{
+		getVideoView().vidX = (int)x;
+		getVideoView().vidY = (int)y;
+		getVideoView().vidWidth = (int)width;
+		getVideoView().vidHeight = (int)height;
+		Extension.log("setDisplayRect: "+x+", "+y+", "+width+", "+height);
 	}
 	
 	public void onCompletion(MediaPlayer mp)

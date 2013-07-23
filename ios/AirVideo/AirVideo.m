@@ -184,6 +184,45 @@ DEFINE_ANE_FUNCTION(hidePlayer)
     return nil;
 }
 
+DEFINE_ANE_FUNCTION(resizeVideo)
+{
+    double x;
+    double y;
+    double w;
+    double h;
+    
+    if (FREGetObjectAsDouble(argv[0], &x) == FRE_OK) {
+        NSLog(@"x: %f", x);
+    } else {
+        NSLog(@"couldnt parse number");
+        return nil;
+    }
+    if (FREGetObjectAsDouble(argv[1], &y) == FRE_OK) {
+        NSLog(@"y: %f", y);
+    } else {
+        NSLog(@"couldnt parse number");
+        return nil;
+    }
+    if (FREGetObjectAsDouble(argv[2], &w) == FRE_OK) {
+        NSLog(@"width: %f", w);
+    } else {
+        NSLog(@"couldnt parse number");
+        return nil;
+    }
+    if (FREGetObjectAsDouble(argv[3], &h) == FRE_OK) {
+        NSLog(@"height: %f", h);
+    } else {
+        NSLog(@"couldnt parse number");
+        return nil;
+    }
+    [[AirVideo sharedInstance] setRequestedFrame:CGRectMake(x, y, w, h)];
+    NSLog(@"will resize video to %@", NSStringFromCGRect([[AirVideo sharedInstance]requestedFrame]));
+    
+    [[AirVideo sharedInstance] resize];
+    
+    return nil;
+}
+
 DEFINE_ANE_FUNCTION(loadVideo)
 {
     NSLog(@"Entering loadVideo");
@@ -269,7 +308,7 @@ void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContex
                         uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet) 
 {
     // Register the links btwn AS3 and ObjC. (dont forget to modify the nbFuntionsToLink integer if you are adding/removing functions)
-    NSInteger nbFuntionsToLink = 3;
+    NSInteger nbFuntionsToLink = 4;
     *numFunctionsToTest = nbFuntionsToLink;
     
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * nbFuntionsToLink);
@@ -285,6 +324,10 @@ void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     func[2].name = (const uint8_t*) "loadVideo";
     func[2].functionData = NULL;
     func[2].function = &loadVideo;
+    
+    func[3].name = (const uint8_t*) "resizeVideo";
+    func[3].functionData = NULL;
+    func[3].function = &resizeVideo;
     
     *functionsToSet = func;
     
