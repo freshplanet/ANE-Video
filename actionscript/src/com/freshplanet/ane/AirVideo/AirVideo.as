@@ -71,7 +71,7 @@ package com.freshplanet.ane.AirVideo
 		{
 			if (!isSupported) return;
 			
-			_context.call("showPlayer");
+			_context.call("airVideoShowPlayer");
 		}
 		
 		/** Remove the video player from the display list. */
@@ -79,7 +79,7 @@ package com.freshplanet.ane.AirVideo
 		{
 			if (!isSupported) return;
 			
-			_context.call("hidePlayer");
+			_context.call("airVideoHidePlayer");
 		}
 		
 		/** Return the URL of the video being played currently, or <code>null</code> nothing is playing. */
@@ -106,16 +106,16 @@ package com.freshplanet.ane.AirVideo
 
 			if (displayArea)
 			{
-				_context.call("loadVideo", url, isLocalFile, displayArea.x, displayArea.y, displayArea.width, displayArea.height);
+				_context.call("airVideoLoadVideo", url, isLocalFile, displayArea.x, displayArea.y, displayArea.width, displayArea.height);
 
-			} else _context.call("loadVideo", url, isLocalFile);
+			} else _context.call("airVideoLoadVideo", url, isLocalFile);
 			setCurrentVideo(url);
 		}
 		
 		public function resizeVideo(displayArea:Rectangle) : void
 		{
 			if (!isSupported) return;
-			_context.call("resizeVideo", displayArea.x, displayArea.y, displayArea.width, displayArea.height);
+			_context.call("airVideoResizeVideo", displayArea.x, displayArea.y, displayArea.width, displayArea.height);
 		}
 		
 		/**

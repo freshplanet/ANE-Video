@@ -49,10 +49,10 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	{
 		Map<String, FREFunction> functions = new HashMap<String, FREFunction>();
 		
-		functions.put("showPlayer", new ShowPlayerFunction());
-		functions.put("hidePlayer", new HidePlayerFunction());
-		functions.put("loadVideo", new LoadVideoFunction());
-		functions.put("resizeVideo", new ResizePlayerFunction());
+		functions.put("airVideoShowPlayer", new ShowPlayerFunction());
+		functions.put("airVideoHidePlayer", new HidePlayerFunction());
+		functions.put("airVideoLoadVideo", new LoadVideoFunction());
+		functions.put("airVideoResizeVideo", new ResizePlayerFunction());
 		
 		return functions;
 	}

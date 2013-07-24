@@ -313,19 +313,19 @@ void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * nbFuntionsToLink);
     
-    func[0].name = (const uint8_t*) "showPlayer";
+    func[0].name = (const uint8_t*) "airVideoShowPlayer";
     func[0].functionData = NULL;
     func[0].function = &showPlayer;
     
-    func[1].name = (const uint8_t*) "hidePlayer";
+    func[1].name = (const uint8_t*) "airVideoHidePlayer";
     func[1].functionData = NULL;
     func[1].function = &hidePlayer;
     
-    func[2].name = (const uint8_t*) "loadVideo";
+    func[2].name = (const uint8_t*) "airVideoLoadVideo";
     func[2].functionData = NULL;
     func[2].function = &loadVideo;
     
-    func[3].name = (const uint8_t*) "resizeVideo";
+    func[3].name = (const uint8_t*) "airVideoResizeVideo";
     func[3].functionData = NULL;
     func[3].function = &resizeVideo;
     
