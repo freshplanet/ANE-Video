@@ -36,10 +36,10 @@
 
 
 // C interface
-DEFINE_ANE_FUNCTION(showPlayer);
-DEFINE_ANE_FUNCTION(hidePlayer);
-DEFINE_ANE_FUNCTION(loadVideo);
-DEFINE_ANE_FUNCTION(resizeVideo);
+DEFINE_ANE_FUNCTION(airVideoShowPlayer);
+DEFINE_ANE_FUNCTION(airVideoDisposePlayer);
+DEFINE_ANE_FUNCTION(airVideoLoadVideo);
+DEFINE_ANE_FUNCTION(airVideoResizeVideo);
 
 // ANE Setup
 void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet);

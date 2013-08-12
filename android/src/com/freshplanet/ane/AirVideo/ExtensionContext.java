@@ -24,8 +24,8 @@ import java.util.Map;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -38,7 +38,7 @@ import com.freshplanet.ane.AirVideo.functions.ShowPlayerFunction;
 
 public class ExtensionContext extends FREContext implements OnCompletionListener
 {
-	private ResizeVideoView _videoView = null;
+	private VideoView _videoView = null;
 	private ViewGroup _videoContainer = null;
 	
 	@Override
@@ -66,20 +66,28 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	{
 		if (_videoContainer == null)
 		{
-			_videoContainer = new FrameLayout(getActivity());
-			_videoContainer.addView(getVideoView(), new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+			_videoContainer = new RelativeLayout(getActivity());
+			
+			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.addRule(RelativeLayout.CENTER_VERTICAL, 1);
+			params.addRule(RelativeLayout.CENTER_HORIZONTAL, 1); 
+			_videoContainer.addView(getVideoView(), params);
 		}
 		
 		return _videoContainer;
 	}
 	
-	public ResizeVideoView getVideoView()
+	public VideoView getVideoView()
 	{
 		if (_videoView == null)
 		{
-			_videoView = new ResizeVideoView(getActivity());
+			_videoView = new VideoView(getActivity());
 			_videoView.setZOrderOnTop(true);
-			_videoView.setMediaController(new MediaController(getActivity()));
+			
+			MediaController mediaController = new MediaController(getActivity());
+			mediaController.setAnchorView(_videoView);
+			
+			_videoView.setMediaController(mediaController);
 			_videoView.setOnCompletionListener(this);
 		}
 		
@@ -88,11 +96,12 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	
 	public void setDisplayRect(double x, double y, double width, double height)
 	{
-		getVideoView().vidX = (int)x;
-		getVideoView().vidY = (int)y;
-		getVideoView().vidWidth = (int)width;
-		getVideoView().vidHeight = (int)height;
-		Extension.log("setDisplayRect: "+x+", "+y+", "+width+", "+height);
+		RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)_videoView.getLayoutParams();
+		params.leftMargin = (int)x;
+		params.topMargin = (int)y;
+		params.width = (int)width;
+		params.height = (int)height;
+		_videoView.setLayoutParams(params);
 	}
 	
 	public void onCompletion(MediaPlayer mp)

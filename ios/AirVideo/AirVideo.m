@@ -169,7 +169,7 @@ static AirVideo *sharedInstance = nil;
 
 #pragma mark - C interface
 
-DEFINE_ANE_FUNCTION(showPlayer)
+DEFINE_ANE_FUNCTION(airVideoShowPlayer)
 {
     UIView *rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
     [rootView addSubview:[[[AirVideo sharedInstance] player] view]];
@@ -177,14 +177,16 @@ DEFINE_ANE_FUNCTION(showPlayer)
     return nil;
 }
 
-DEFINE_ANE_FUNCTION(hidePlayer)
+DEFINE_ANE_FUNCTION(airVideoDisposePlayer)
 {
+    [[[AirVideo sharedInstance] player] stop];
+    [[AirVideo sharedInstance] player].fullscreen = false;
     [[[[AirVideo sharedInstance] player] view] removeFromSuperview];
     
     return nil;
 }
 
-DEFINE_ANE_FUNCTION(resizeVideo)
+DEFINE_ANE_FUNCTION(airVideoResizeVideo)
 {
     double x;
     double y;
@@ -223,9 +225,9 @@ DEFINE_ANE_FUNCTION(resizeVideo)
     return nil;
 }
 
-DEFINE_ANE_FUNCTION(loadVideo)
+DEFINE_ANE_FUNCTION(airVideoLoadVideo)
 {
-    NSLog(@"Entering loadVideo");
+    NSLog(@"Entering airVideoLoadVideo");
     uint32_t stringLength;
     
     NSString *path = nil;
@@ -300,7 +302,7 @@ DEFINE_ANE_FUNCTION(loadVideo)
         [[[AirVideo sharedInstance] player] play];
     }
     
-    NSLog(@"Exiting loadVideo");
+    NSLog(@"Exiting airVideoLoadVideo");
     return nil;
 }
 
@@ -315,19 +317,19 @@ void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     
     func[0].name = (const uint8_t*) "airVideoShowPlayer";
     func[0].functionData = NULL;
-    func[0].function = &showPlayer;
+    func[0].function = &airVideoShowPlayer;
     
     func[1].name = (const uint8_t*) "airVideoHidePlayer";
     func[1].functionData = NULL;
-    func[1].function = &hidePlayer;
+    func[1].function = &airVideoDisposePlayer;
     
     func[2].name = (const uint8_t*) "airVideoLoadVideo";
     func[2].functionData = NULL;
-    func[2].function = &loadVideo;
+    func[2].function = &airVideoLoadVideo;
     
     func[3].name = (const uint8_t*) "airVideoResizeVideo";
     func[3].functionData = NULL;
-    func[3].function = &resizeVideo;
+    func[3].function = &airVideoResizeVideo;
     
     *functionsToSet = func;
     
