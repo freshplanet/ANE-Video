@@ -24,8 +24,7 @@ import java.util.Map;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -39,7 +38,6 @@ import com.freshplanet.ane.AirVideo.functions.ShowPlayerFunction;
 public class ExtensionContext extends FREContext implements OnCompletionListener
 {
 	private VideoView _videoView = null;
-	private ViewGroup _videoContainer = null;
 	
 	@Override
 	public void dispose() {}
@@ -62,21 +60,6 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 		return (ViewGroup)((ViewGroup)getActivity().findViewById(android.R.id.content)).getChildAt(0);
 	}
 	
-	public ViewGroup getVideoContainer()
-	{
-		if (_videoContainer == null)
-		{
-			_videoContainer = new RelativeLayout(getActivity());
-			
-			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			params.addRule(RelativeLayout.CENTER_VERTICAL, 1);
-			params.addRule(RelativeLayout.CENTER_HORIZONTAL, 1); 
-			_videoContainer.addView(getVideoView(), params);
-		}
-		
-		return _videoContainer;
-	}
-	
 	public VideoView getVideoView()
 	{
 		if (_videoView == null)
@@ -96,12 +79,13 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	
 	public void setDisplayRect(double x, double y, double width, double height)
 	{
-		RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)_videoView.getLayoutParams();
+		LayoutParams params = (LayoutParams)_videoView.getLayoutParams();
 		params.leftMargin = (int)x;
 		params.topMargin = (int)y;
 		params.width = (int)width;
 		params.height = (int)height;
 		_videoView.setLayoutParams(params);
+		_videoView.invalidate();
 	}
 	
 	public void onCompletion(MediaPlayer mp)

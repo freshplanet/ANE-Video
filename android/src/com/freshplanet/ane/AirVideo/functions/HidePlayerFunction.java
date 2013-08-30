@@ -19,6 +19,7 @@
 package com.freshplanet.ane.AirVideo.functions;
 
 import android.view.ViewGroup;
+import android.widget.VideoView;
 
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
@@ -31,7 +32,7 @@ public class HidePlayerFunction implements FREFunction
 	public FREObject call(FREContext context, FREObject[] args)
 	{
 		ViewGroup rootContainer = Extension.context.getRootContainer();
-		ViewGroup videoContainer = Extension.context.getVideoContainer();
+		VideoView videoContainer = Extension.context.getVideoView();
 		rootContainer.removeView(videoContainer);
 		
 		return null;

@@ -31,10 +31,6 @@ public class LoadVideoFunction implements FREFunction
 	public FREObject call(FREContext context, FREObject[] args)
 	{
 		String url = null;
-		double x = 0;
-		double y = 0;
-		double width = 0;
-		double height = 0;
 		try
 		{
 			url = args[0].getAsString();
@@ -47,24 +43,6 @@ public class LoadVideoFunction implements FREFunction
 		
 		Extension.context.getVideoView().setVideoURI(Uri.parse(url));
 		Extension.context.getVideoView().start();
-		
-		if(args.length == 6)
-		{
-			try
-			{
-				x = args[2].getAsDouble();
-				y = args[3].getAsDouble();
-				width = args[4].getAsDouble();
-				height = args[5].getAsDouble();
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				return null;
-			}
-			
-			Extension.context.setDisplayRect(x,y,width,height);
-		}
 		
 		return null;
 	}
