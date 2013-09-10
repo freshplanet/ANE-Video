@@ -4,9 +4,8 @@ package com.freshplanet.ane.AirVideo
 	import flash.events.EventDispatcher;
 	import flash.events.StatusEvent;
 	import flash.external.ExtensionContext;
-	import flash.system.Capabilities;
-
 	import flash.geom.Rectangle;
+	import flash.system.Capabilities;
 
 	public class AirVideo extends EventDispatcher
 	{
@@ -18,6 +17,7 @@ package com.freshplanet.ane.AirVideo
 		
 		/** Event dispatched each time the currently played video changes. */
 		public static const CURRENT_VIDEO_CHANGED : String = "CURRENT_VIDEO_CHANGED";
+		public static const VIDEO_PLAYBACK_ERROR  : String = "VIDEO_PLAYBACK_ERROR";
 		
 		/** AirVideo is supported on iOS and Android devices. */
 		public static function get isSupported() : Boolean
@@ -186,6 +186,10 @@ package com.freshplanet.ane.AirVideo
 			if (event.code == "PLAYBACK_DID_FINISH")
 			{
 				next();
+			}
+			else if (event.code == "PLAYBACK_ERROR")
+			{
+				dispatchEvent(new Event(VIDEO_PLAYBACK_ERROR));
 			}
 			else if (event.code == "LOGGING") // Simple log message
 			{

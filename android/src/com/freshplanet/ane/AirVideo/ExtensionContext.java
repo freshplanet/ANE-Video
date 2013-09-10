@@ -23,6 +23,7 @@ import java.util.Map;
 
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnErrorListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.MediaController;
@@ -35,7 +36,7 @@ import com.freshplanet.ane.AirVideo.functions.LoadVideoFunction;
 import com.freshplanet.ane.AirVideo.functions.ResizePlayerFunction;
 import com.freshplanet.ane.AirVideo.functions.ShowPlayerFunction;
 
-public class ExtensionContext extends FREContext implements OnCompletionListener
+public class ExtensionContext extends FREContext implements OnCompletionListener, OnErrorListener
 {
 	private VideoView _videoView = null;
 	
@@ -72,6 +73,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 			
 			_videoView.setMediaController(mediaController);
 			_videoView.setOnCompletionListener(this);
+			_videoView.setOnErrorListener(this);
 		}
 		
 		return _videoView;
@@ -91,5 +93,12 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	public void onCompletion(MediaPlayer mp)
 	{
 		dispatchStatusEventAsync("PLAYBACK_DID_FINISH", "OK");
+	}
+
+	@Override
+	public boolean onError(MediaPlayer mp, int what, int extra) 
+	{
+		dispatchStatusEventAsync("PLAYBACK_ERROR", "OK");
+		return false;
 	}
 }
