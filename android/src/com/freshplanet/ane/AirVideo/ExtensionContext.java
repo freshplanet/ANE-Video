@@ -88,7 +88,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 			_videoContainer = new FrameLayout(getActivity());
 			if (videoLayoutParams == null)
 			{
-				videoLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+				videoLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.FILL_PARENT);
 				videoLayoutParams.gravity = Gravity.CENTER;
 			}
 			_videoContainer.addView(getVideoView(), videoLayoutParams);
