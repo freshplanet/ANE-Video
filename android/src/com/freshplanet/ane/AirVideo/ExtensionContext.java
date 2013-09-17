@@ -61,7 +61,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 		
 		functions.put("showPlayer", new ShowPlayerFunction());
 		functions.put("hidePlayer", new HidePlayerFunction());
-		functions.put("loadVideo", new LoadVideoFunction());
+		functions.put("fetchVideo", new LoadVideoFunction());
 		
 		functions.put("bufferVideos", new BufferVideosFunction());
 		functions.put("playVideo", new PlayVideoFunction());
@@ -81,7 +81,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	
 	private FrameLayout.LayoutParams videoLayoutParams;
 	
-	public ViewGroup getVideoContainer()
+	private ViewGroup getVideoContainer()
 	{
 		if (_videoContainer == null)
 		{
@@ -126,6 +126,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	@Override
 	public void onCompletion(MediaPlayer mp)
 	{
+		Log.d(TAG, "playback did finish");
 		dispatchStatusEventAsync("PLAYBACK_DID_FINISH", "OK");
 	}
 	
@@ -180,7 +181,10 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 		videoContainerLayoutParams.gravity = Gravity.LEFT | Gravity.TOP;
 		videoContainerLayoutParams.leftMargin = (int) x;
 		videoContainerLayoutParams.topMargin = (int) y;
-		getVideoContainer().setLayoutParams(videoLayoutParams);
+		if (_videoContainer != null)
+		{
+			getVideoContainer().setLayoutParams(videoLayoutParams);
+		}
 	}
 	
 	public void pauseVideo()
@@ -197,6 +201,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	{
 		if (_videoContainer != null)
 		{
+			Log.d(TAG, "show player, visibility true");
 			_videoContainer.setVisibility(View.VISIBLE);
 		} else
 		{
@@ -205,7 +210,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 		}
 	}
 	
-	private static String TAG = "ExtenstionCon";
+	private static String TAG = "ExtensionCon";
 	
 	public void createPlayer()
 	{

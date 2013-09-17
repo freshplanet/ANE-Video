@@ -107,7 +107,15 @@ package com.freshplanet.ane.AirVideo
 			_netStreams = [];
 		}
 		
-		
+		public function loadVideo(url:String):void
+		{
+			var connection:NetConnection = new NetConnection();
+			connection.connect(null);
+			var netstream:NetStream = new CustomNetStream(url, connection);
+			netstream.play(url);
+			_stageVideo.attachNetStream(netstream);
+			resize();
+		}
 		
 		private var _x:Number;
 		private var _y:Number;

@@ -75,9 +75,9 @@
 		FA8DA7FA16A46CB200CE1D10 /* AirVideo */ = {
 			isa = PBXGroup;
 			children = (
-				FA8DA7FC16A46CB200CE1D10 /* AirVideo.h */,
 				5A20D840171F9A7600498D01 /* RequestDelegate.h */,
 				5A20D841171F9A7600498D01 /* RequestDelegate.m */,
+				FA8DA7FC16A46CB200CE1D10 /* AirVideo.h */,
 				FA8DA7FD16A46CB200CE1D10 /* AirVideo.m */,
 				FA8DA80516A46CFF00CE1D10 /* Supporting Files */,
 			);

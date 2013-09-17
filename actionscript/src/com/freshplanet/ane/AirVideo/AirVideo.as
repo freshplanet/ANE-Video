@@ -212,9 +212,14 @@ package com.freshplanet.ane.AirVideo
 		 */
 		public function loadVideo( url : String ) : void
 		{
-			if (!isSupported) return;
+			if (!isSupported) 
+			{
+				_desktopVideo.loadVideo(url);
+			} else
+			{
+				_context.call("fetchVideo", url);
+			}
 			
-			_context.call("fetchVideo", url);
 			setCurrentVideo(url);
 		}
 		

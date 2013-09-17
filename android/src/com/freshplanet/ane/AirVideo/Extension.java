@@ -18,6 +18,8 @@
 
 package com.freshplanet.ane.AirVideo;
 
+import android.util.Log;
+
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREExtension;
 
@@ -41,8 +43,11 @@ public class Extension implements FREExtension
 	@Override
 	public void initialize() { }
 	
+	private static String TAG = "VideoExtension";
+	
 	public static void log(String message)
 	{
+		Log.d(TAG, message);
 		context.dispatchStatusEventAsync("LOGGING", message);
 	}
 }

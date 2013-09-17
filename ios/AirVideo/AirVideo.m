@@ -403,7 +403,8 @@ DEFINE_ANE_FUNCTION(fetchVideo)
         NSLog(@"[fetchVideo] url found: %@", url);
         [[[AirVideo sharedInstance] player] setContentURL:[NSURL URLWithString:url]];
         [[[AirVideo sharedInstance] player] prepareToPlay];
-            
+        [[[AirVideo sharedInstance] player] view].hidden = NO;
+        
     } else
     {
         NSLog(@"[fetchVideo] url not found");
