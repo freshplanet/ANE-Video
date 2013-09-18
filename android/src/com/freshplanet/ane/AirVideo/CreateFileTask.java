@@ -50,7 +50,7 @@ public class CreateFileTask extends AsyncTask<byte[], Integer, String> {
 		
 		ByteArrayInputStream input = new ByteArrayInputStream(bInput);
 		
-		Log.d(TAG, "creating file");
+		Log.d(TAG, "creating file with "+mOutputDir);
 		File tempFile;
 		try {
 			tempFile = File.createTempFile("video", ".mp4", mOutputDir);
@@ -72,9 +72,7 @@ public class CreateFileTask extends AsyncTask<byte[], Integer, String> {
 			e.printStackTrace();
 		}   
 		
-		Log.d(TAG, "start buffering");
 	    byte buf[] = new byte[16384];
-	    Log.d(TAG, "start buffering2 ");
 	    do {
 	        int numread = -1;
 			try {
@@ -96,7 +94,6 @@ public class CreateFileTask extends AsyncTask<byte[], Integer, String> {
 			}
 	    } while (input != null);
 
-	    Log.d(TAG, "out of the loop ");
 		if (out != null)
 		{
 			try {
