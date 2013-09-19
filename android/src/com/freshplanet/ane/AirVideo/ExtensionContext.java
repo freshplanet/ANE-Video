@@ -55,7 +55,8 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	
 	private FrameLayout.LayoutParams videoLayoutParams;
 	private FrameLayout.LayoutParams videoContainerLayoutParams;
-
+	private FrameLayout.LayoutParams videoContainerLayoutParamsEmpty;
+	
 	private MyVideoView _videoView = null;
 	private ViewGroup _videoContainer = null;
 	private ViewGroup _rootContainer = null;
@@ -305,9 +306,8 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 				Log.d(TAG, "video container with default layout");
 				rootContainer.addView(videoContainer, new FrameLayout.LayoutParams(200, 200, Gravity.TOP));
 			}
-			Log.d(TAG, "set visibility to false");
 			
-			videoContainer.setVisibility(View.INVISIBLE);
+			makeContainerInvisible();
 		}
 		updateStyle();
 	}
@@ -333,7 +333,26 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 			Log.d(TAG, "set visibility to true "+getVideoContainer().toString());
 			getVideoContainer().setVisibility(View.VISIBLE);
 			getVideoView().setZOrderOnTop(true);
+			getVideoContainer().setLayoutParams(videoContainerLayoutParams);
 		}
+	}
+	
+	public void makeContainerInvisible()
+	{
+		if (_videoContainer != null)
+		{
+			Log.d(TAG, "set visibility to false "+getVideoContainer().toString());
+			getVideoContainer().setVisibility(View.INVISIBLE);
+			if (videoContainerLayoutParamsEmpty == null)
+			{
+				videoContainerLayoutParamsEmpty = new FrameLayout.LayoutParams((int) 0, (int)0);
+				videoContainerLayoutParamsEmpty.leftMargin = (int) 0;
+				videoContainerLayoutParamsEmpty.topMargin = (int) 0;
+			}
+			
+			getVideoContainer().setLayoutParams(videoContainerLayoutParamsEmpty);
+		}
+
 	}
 	
 	public void hidePlayer()
@@ -368,6 +387,9 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	            new File(movieDirectory, children[i]).delete();
 	        }
 	    }
+		
+		// clean up the view too
+		disposeVideo();
 	}
 	
 	/**

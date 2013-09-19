@@ -49,7 +49,6 @@ public class CreateFileTask extends AsyncTask<byte[], Integer, String> {
 		
 		ByteArrayInputStream input = new ByteArrayInputStream(bInput);
 		
-		Log.d(TAG, "creating file with "+mOutputDir);
 		File tempFile;
 		try {
 			tempFile = File.createTempFile("video", ".mp4", mOutputDir);
@@ -61,7 +60,6 @@ public class CreateFileTask extends AsyncTask<byte[], Integer, String> {
 		
 		mFilePath = tempFile.getAbsolutePath();
 		mFileName = tempFile.getName();
-		Log.d(TAG, "getting file temp: "+mFilePath);
 
 	    FileOutputStream out = null;
 		try {
@@ -121,6 +119,7 @@ public class CreateFileTask extends AsyncTask<byte[], Integer, String> {
 			if (android.os.Build.VERSION.SDK_INT < 14)
 			{
 				Log.d(TAG, "froyo detected");
+				Extension.context.makeContainerInvisible();
 				Extension.context.dispatchStatusEventAsync("READY_TO_DISPLAY", "OK");
 			}
 		} catch (Exception e)
