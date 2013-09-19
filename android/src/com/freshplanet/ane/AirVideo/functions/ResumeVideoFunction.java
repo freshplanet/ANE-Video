@@ -17,7 +17,11 @@ public class ResumeVideoFunction implements FREFunction {
 	
 	@Override
 	public FREObject call(FREContext arg0, FREObject[] arg1) {
+		
+		
+		
 		Log.d(TAG, "resuming video");
+		
 		
 		int timePosition = 0;
 		int position = 0;
@@ -41,13 +45,17 @@ public class ResumeVideoFunction implements FREFunction {
 		byte[] input = Extension.context.getStreamAtPosition(position);
 		CreateFileTask task = new CreateFileTask();
 		task.setParams(position, timePosition, arg0.getActivity().getExternalCacheDir());
-		// delete previous file first
-		String previousFileName = task.getPreviousFileName();
-		if (previousFileName != null)
-		{
-			arg0.getActivity().deleteFile(previousFileName);
-		}
 		task.execute(input);
+
+		
+		
+		// delete previous file first
+//		String previousFileName = task.getPreviousFileName();
+//		if (previousFileName != null)
+//		{
+//			arg0.getActivity().deleteFile(previousFileName);
+//		}
+		
 		
 		return null;
 	}

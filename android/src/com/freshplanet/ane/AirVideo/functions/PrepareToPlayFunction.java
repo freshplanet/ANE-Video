@@ -26,6 +26,10 @@ public class PrepareToPlayFunction implements FREFunction {
 		}
 		
 		Log.d(TAG, "fetching stream");
+		Extension.context.disposeVideo();
+		Extension.context.showPlayer();
+		Extension.context.resizeVideo();
+		
 		byte[] input = Extension.context.getStreamAtPosition(position);
 		CreateFileTask task = new CreateFileTask();
 		task.setParams(position, 0, arg0.getActivity().getExternalCacheDir());

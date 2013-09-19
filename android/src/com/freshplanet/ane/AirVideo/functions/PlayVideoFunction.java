@@ -24,7 +24,7 @@ public class PlayVideoFunction implements FREFunction {
 		}
 		
 		Extension.context.showPlayer();
-		Extension.context.getVideoView().start();
+		Extension.context.startVideo();
 		return null;
 	}
 

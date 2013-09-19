@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -112,19 +111,16 @@ public class CreateFileTask extends AsyncTask<byte[], Integer, String> {
 		Log.d(TAG, "setting the video param");
 		try
 		{
-			Extension.context.getVideoView().setVideoURI(Uri.parse(mFilePath));
+			Extension.context.setVideoPath(mFilePath);
 			if (mTimePosition > 0)
 			{
-				Log.d(TAG, "seeking to "+Integer.toString(mTimePosition));
-				Extension.context.getVideoView().seekTo(mTimePosition);
-				Extension.context.getVideoView().start();
+				Extension.context.startVideo(mTimePosition);
+				Extension.context.makeContainerVisible();
 			}
 			Extension.context.createPlayer();
 			if (android.os.Build.VERSION.SDK_INT < 14)
 			{
 				Log.d(TAG, "froyo detected");
-//				Extension.context.getVideoView().start();
-//				Extension.context.getVideoView().pause();
 				Extension.context.dispatchStatusEventAsync("READY_TO_DISPLAY", "OK");
 			}
 		} catch (Exception e)

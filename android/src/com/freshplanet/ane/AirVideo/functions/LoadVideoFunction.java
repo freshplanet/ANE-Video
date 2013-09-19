@@ -18,8 +18,6 @@
 
 package com.freshplanet.ane.AirVideo.functions;
 
-import android.net.Uri;
-
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
@@ -41,8 +39,8 @@ public class LoadVideoFunction implements FREFunction
 			return null;
 		}
 		
-		Extension.context.getVideoView().setVideoURI(Uri.parse(url));
-		Extension.context.getVideoView().start();
+		Extension.context.setVideoPath(url);
+		Extension.context.startVideo();
 		
 		return null;
 	}
