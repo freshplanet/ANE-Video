@@ -18,6 +18,7 @@
 
 package com.freshplanet.ane.AirVideo;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -292,7 +293,6 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 			Log.d(TAG, "video container has already a parent...");
 			//parent.removeView(videoContainer);
 			videoContainer.setLayoutParams(videoContainerLayoutParams);
-			debug();
 		} else
 		{
 			_videoView.setZOrderOnTop(true);
@@ -307,7 +307,6 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 			}
 			Log.d(TAG, "set visibility to false");
 			
-			debug();
 			videoContainer.setVisibility(View.INVISIBLE);
 		}
 		updateStyle();
@@ -335,8 +334,6 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 			getVideoContainer().setVisibility(View.VISIBLE);
 			getVideoView().setZOrderOnTop(true);
 		}
-		
-		debug();
 	}
 	
 	public void hidePlayer()
@@ -352,8 +349,6 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	public void disposeVideo()
 	{
 		Log.d(TAG, "dispose view");
-		debug();
-		
 		if (_videoContainer != null)
 		{
 			_videoContainer.removeAllViews();
@@ -362,12 +357,17 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 			_videoContainer = null;
 		}
 		_videoView = null;
-		debug();
 	}
 	
-	public void cleanUp()
+	public void cleanUp(File movieDirectory)
 	{
 		videosData = null;
+		if (movieDirectory.isDirectory()) {
+	        String[] children = movieDirectory.list();
+	        for (int i = 0; i < children.length; i++) {
+	            new File(movieDirectory, children[i]).delete();
+	        }
+	    }
 	}
 	
 	/**

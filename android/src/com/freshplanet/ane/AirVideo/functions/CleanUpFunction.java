@@ -17,7 +17,7 @@ public class CleanUpFunction implements FREFunction {
 			arg0.getActivity().deleteFile(previousFilePath);
 		}
 
-		Extension.context.cleanUp();
+		Extension.context.cleanUp(arg0.getActivity().getExternalCacheDir());
 		return null;
 	}
 
