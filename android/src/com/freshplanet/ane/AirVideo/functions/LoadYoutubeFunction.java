@@ -16,33 +16,30 @@
 //  
 //////////////////////////////////////////////////////////////////////////////////////
 
-package com.freshplanet.ane.AirVideo;
+package com.freshplanet.ane.AirVideo.functions;
 
 import com.adobe.fre.FREContext;
-import com.adobe.fre.FREExtension;
+import com.adobe.fre.FREFunction;
+import com.adobe.fre.FREObject;
+import com.freshplanet.ane.AirVideo.AirVideoExtension;
 
-public class Extension implements FREExtension
+public class LoadYoutubeFunction implements FREFunction
 {
-	public static ExtensionContext context;
-	
 	@Override
-	public FREContext createContext(String arg0)
+	public FREObject call(FREContext context, FREObject[] args)
 	{
-		context = new ExtensionContext();
-		return context;
-	}
-
-	@Override
-	public void dispose()
-	{
-		context = null;
-	}
-
-	@Override
-	public void initialize() { }
-	
-	public static void log(String message)
-	{
-		context.dispatchStatusEventAsync("LOGGING", message);
+		String id = null;
+		try
+		{
+			id = args[0].getAsString();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+		
+		AirVideoExtension.context.loadVideoFromYouTubeID(id);
+		return null;
 	}
 }

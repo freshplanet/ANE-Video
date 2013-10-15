@@ -7,24 +7,48 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		407A89F8180D883D003A997A /* AirYouTubeController.h in Headers */ = {isa = PBXBuildFile; fileRef = 407A89F6180D883D003A997A /* AirYouTubeController.h */; };
+		407A89F9180D883D003A997A /* AirYouTubeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 407A89F7180D883D003A997A /* AirYouTubeController.m */; };
+		407A89FD180D8863003A997A /* XPathQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 407A89FA180D8863003A997A /* XPathQuery.h */; };
+		407A89FE180D8863003A997A /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 407A89FB180D8863003A997A /* XPathQuery.m */; };
+		407A89FF180D8863003A997A /* SystemVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 407A89FC180D8863003A997A /* SystemVersion.h */; };
+		407A8A03180D988E003A997A /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 407A8A02180D988E003A997A /* libxml2.dylib */; };
+		407A8A0E180DBBB6003A997A /* FPYouTube.h in Headers */ = {isa = PBXBuildFile; fileRef = 407A8A07180DBBB6003A997A /* FPYouTube.h */; };
+		407A8A0F180DBBB6003A997A /* FPYouTubeExtractor.h in Headers */ = {isa = PBXBuildFile; fileRef = 407A8A08180DBBB6003A997A /* FPYouTubeExtractor.h */; };
+		407A8A10180DBBB6003A997A /* FPYouTubeExtractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 407A8A09180DBBB6003A997A /* FPYouTubeExtractor.m */; };
+		407A8A11180DBBB6003A997A /* FPYouTubeExtractorDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 407A8A0A180DBBB6003A997A /* FPYouTubeExtractorDelegate.h */; };
+		407A8A12180DBBB6003A997A /* FPYouTubePlayerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 407A8A0B180DBBB6003A997A /* FPYouTubePlayerController.h */; };
+		407A8A13180DBBB6003A997A /* FPYouTubePlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 407A8A0C180DBBB6003A997A /* FPYouTubePlayerController.m */; };
+		407A8A14180DBBB6003A997A /* FPYouTubePlayerControllerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 407A8A0D180DBBB6003A997A /* FPYouTubePlayerControllerDelegate.h */; };
 		5A98569C15213BC3003A8EB0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A98569B15213BC3003A8EB0 /* Foundation.framework */; };
 		FA8DA7FE16A46CB200CE1D10 /* AirVideo-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = FA8DA7FB16A46CB200CE1D10 /* AirVideo-Prefix.pch */; };
 		FA8DA7FF16A46CB200CE1D10 /* AirVideo.h in Headers */ = {isa = PBXBuildFile; fileRef = FA8DA7FC16A46CB200CE1D10 /* AirVideo.h */; };
-		FA8DA80016A46CB200CE1D10 /* AirVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8DA7FD16A46CB200CE1D10 /* AirVideo.m */; };
-		FA8DA80216A46CD000CE1D10 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA8DA80116A46CD000CE1D10 /* UIKit.framework */; };
+		FA8DA80016A46CB200CE1D10 /* AirVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8DA7FD16A46CB200CE1D10 /* AirVideo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		FA8DA80416A46CD600CE1D10 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA8DA80316A46CD600CE1D10 /* MediaPlayer.framework */; };
 		FA8DA80716A46D4500CE1D10 /* FlashRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = FA8DA80616A46D4500CE1D10 /* FlashRuntimeExtensions.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		407A89F6180D883D003A997A /* AirYouTubeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirYouTubeController.h; sourceTree = "<group>"; };
+		407A89F7180D883D003A997A /* AirYouTubeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirYouTubeController.m; sourceTree = "<group>"; };
+		407A89FA180D8863003A997A /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPathQuery.h; sourceTree = "<group>"; };
+		407A89FB180D8863003A997A /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPathQuery.m; sourceTree = "<group>"; };
+		407A89FC180D8863003A997A /* SystemVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemVersion.h; sourceTree = "<group>"; };
+		407A8A02180D988E003A997A /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		407A8A07180DBBB6003A997A /* FPYouTube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FPYouTube.h; path = FPYouTubeView/FPYouTube.h; sourceTree = "<group>"; };
+		407A8A08180DBBB6003A997A /* FPYouTubeExtractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FPYouTubeExtractor.h; path = FPYouTubeView/FPYouTubeExtractor.h; sourceTree = "<group>"; };
+		407A8A09180DBBB6003A997A /* FPYouTubeExtractor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FPYouTubeExtractor.m; path = FPYouTubeView/FPYouTubeExtractor.m; sourceTree = "<group>"; };
+		407A8A0A180DBBB6003A997A /* FPYouTubeExtractorDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FPYouTubeExtractorDelegate.h; path = FPYouTubeView/FPYouTubeExtractorDelegate.h; sourceTree = "<group>"; };
+		407A8A0B180DBBB6003A997A /* FPYouTubePlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FPYouTubePlayerController.h; path = FPYouTubeView/FPYouTubePlayerController.h; sourceTree = "<group>"; };
+		407A8A0C180DBBB6003A997A /* FPYouTubePlayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FPYouTubePlayerController.m; path = FPYouTubeView/FPYouTubePlayerController.m; sourceTree = "<group>"; };
+		407A8A0D180DBBB6003A997A /* FPYouTubePlayerControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FPYouTubePlayerControllerDelegate.h; path = FPYouTubeView/FPYouTubePlayerControllerDelegate.h; sourceTree = "<group>"; };
 		5A98569815213BC3003A8EB0 /* libAirVideo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAirVideo.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A98569B15213BC3003A8EB0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FA8DA7FB16A46CB200CE1D10 /* AirVideo-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AirVideo-Prefix.pch"; sourceTree = "<group>"; };
 		FA8DA7FC16A46CB200CE1D10 /* AirVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirVideo.h; sourceTree = "<group>"; };
 		FA8DA7FD16A46CB200CE1D10 /* AirVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirVideo.m; sourceTree = "<group>"; };
-		FA8DA80116A46CD000CE1D10 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		FA8DA80316A46CD600CE1D10 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		FA8DA80616A46D4500CE1D10 /* FlashRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlashRuntimeExtensions.h; sourceTree = "<group>"; };
+		FA8DA80616A46D4500CE1D10 /* FlashRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlashRuntimeExtensions.h; path = AirVideo/FlashRuntimeExtensions.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,14 +57,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA8DA80416A46CD600CE1D10 /* MediaPlayer.framework in Frameworks */,
-				FA8DA80216A46CD000CE1D10 /* UIKit.framework in Frameworks */,
 				5A98569C15213BC3003A8EB0 /* Foundation.framework in Frameworks */,
+				407A8A03180D988E003A997A /* libxml2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		407A8A06180DBB9C003A997A /* FPYouTubeView */ = {
+			isa = PBXGroup;
+			children = (
+				407A8A07180DBBB6003A997A /* FPYouTube.h */,
+				407A8A08180DBBB6003A997A /* FPYouTubeExtractor.h */,
+				407A8A09180DBBB6003A997A /* FPYouTubeExtractor.m */,
+				407A8A0A180DBBB6003A997A /* FPYouTubeExtractorDelegate.h */,
+				407A8A0B180DBBB6003A997A /* FPYouTubePlayerController.h */,
+				407A8A0C180DBBB6003A997A /* FPYouTubePlayerController.m */,
+				407A8A0D180DBBB6003A997A /* FPYouTubePlayerControllerDelegate.h */,
+			);
+			name = FPYouTubeView;
+			sourceTree = "<group>";
+		};
 		5A98568D15213BC2003A8EB0 = {
 			isa = PBXGroup;
 			children = (
@@ -61,9 +99,10 @@
 		5A98569A15213BC3003A8EB0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FA8DA80616A46D4500CE1D10 /* FlashRuntimeExtensions.h */,
+				407A8A02180D988E003A997A /* libxml2.dylib */,
 				5A98569B15213BC3003A8EB0 /* Foundation.framework */,
 				FA8DA80316A46CD600CE1D10 /* MediaPlayer.framework */,
-				FA8DA80116A46CD000CE1D10 /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -73,6 +112,8 @@
 			children = (
 				FA8DA7FC16A46CB200CE1D10 /* AirVideo.h */,
 				FA8DA7FD16A46CB200CE1D10 /* AirVideo.m */,
+				407A89F6180D883D003A997A /* AirYouTubeController.h */,
+				407A89F7180D883D003A997A /* AirYouTubeController.m */,
 				FA8DA80516A46CFF00CE1D10 /* Supporting Files */,
 			);
 			path = AirVideo;
@@ -81,8 +122,11 @@
 		FA8DA80516A46CFF00CE1D10 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				407A8A06180DBB9C003A997A /* FPYouTubeView */,
+				407A89FA180D8863003A997A /* XPathQuery.h */,
+				407A89FB180D8863003A997A /* XPathQuery.m */,
+				407A89FC180D8863003A997A /* SystemVersion.h */,
 				FA8DA7FB16A46CB200CE1D10 /* AirVideo-Prefix.pch */,
-				FA8DA80616A46D4500CE1D10 /* FlashRuntimeExtensions.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -97,6 +141,14 @@
 				FA8DA7FE16A46CB200CE1D10 /* AirVideo-Prefix.pch in Headers */,
 				FA8DA7FF16A46CB200CE1D10 /* AirVideo.h in Headers */,
 				FA8DA80716A46D4500CE1D10 /* FlashRuntimeExtensions.h in Headers */,
+				407A89F8180D883D003A997A /* AirYouTubeController.h in Headers */,
+				407A89FD180D8863003A997A /* XPathQuery.h in Headers */,
+				407A89FF180D8863003A997A /* SystemVersion.h in Headers */,
+				407A8A0E180DBBB6003A997A /* FPYouTube.h in Headers */,
+				407A8A0F180DBBB6003A997A /* FPYouTubeExtractor.h in Headers */,
+				407A8A11180DBBB6003A997A /* FPYouTubeExtractorDelegate.h in Headers */,
+				407A8A12180DBBB6003A997A /* FPYouTubePlayerController.h in Headers */,
+				407A8A14180DBBB6003A997A /* FPYouTubePlayerControllerDelegate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,6 +203,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA8DA80016A46CB200CE1D10 /* AirVideo.m in Sources */,
+				407A89F9180D883D003A997A /* AirYouTubeController.m in Sources */,
+				407A89FE180D8863003A997A /* XPathQuery.m in Sources */,
+				407A8A10180DBBB6003A997A /* FPYouTubeExtractor.m in Sources */,
+				407A8A13180DBBB6003A997A /* FPYouTubePlayerController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,7 +216,7 @@
 		5A9856A315213BC3003A8EB0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
@@ -182,13 +238,14 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
+				USER_HEADER_SEARCH_PATHS = "\"$(SDK_DIR)\"/usr/include/libxml2";
 			};
 			name = Debug;
 		};
 		5A9856A415213BC3003A8EB0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
@@ -203,6 +260,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
+				USER_HEADER_SEARCH_PATHS = "\"$(SDK_DIR)\"/usr/include/libxml2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -210,33 +268,43 @@
 		5A9856A615213BC3003A8EB0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/AirVideo.dst;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AirVideo/AirVideo-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "";
-				INSTALL_PATH = ../;
+				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_SEARCH_PATHS = "";
-				OTHER_LDFLAGS = "-ObjC";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-DDEBUG=1";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = AirVideo;
-				SKIP_INSTALL = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		5A9856A715213BC3003A8EB0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/AirVideo.dst;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AirVideo/AirVideo-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INSTALL_PATH = ../;
+				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_SEARCH_PATHS = "";
-				OTHER_LDFLAGS = "-ObjC";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-DDEBUG=1";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = AirVideo;
-				SKIP_INSTALL = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

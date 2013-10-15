@@ -8,3 +8,19 @@
     #define DEFINE_ANE_FUNCTION(fn) FREObject (fn)(FREContext context, void* functionData, uint32_t argc, FREObject argv[])
     #define IS_RETINA ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] && ([UIScreen mainScreen].scale == 2.0))
 #endif
+
+// DLog is almost a drop-in replacement for NSLog
+// DLog();
+// DLog(@"here");
+// DLog(@"value: %d", x);
+// Unfortunately this doesn't work DLog(aStringVariable); you have to do this instead DLog(@"%@", aStringVariable);
+#ifdef DEBUG
+#	define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#	define DLog(...)
+#endif
+
+#define VIDEO_CHANGE_EVENT @"CURRENT_VIDEO_CHANGED"
+#define VIDEO_PLAYBACK_ERROR @"VIDEO_PLAYBACK_ERROR"
+#define YOUTUBE_EXTRACTION_ERROR @"YOUTUBE_EXTRACTION_ERROR"
+#define VIDEO_LOADED_EVENT @"VIDEO_LOADED_EVENT"
