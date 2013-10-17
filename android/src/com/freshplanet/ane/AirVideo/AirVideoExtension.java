@@ -26,7 +26,7 @@ import com.adobe.fre.FREExtension;
 public class AirVideoExtension implements FREExtension
 {
 	public static AirVideoExtensionContext context;
-	public static boolean doLogging = false;
+	public static boolean doLogging = true;
 	
 	@Override
 	public FREContext createContext(String arg0)

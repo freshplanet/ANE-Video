@@ -56,6 +56,8 @@ public class YouTubeExtractor implements OnTaskCompleted
 	@Override
 	public void onTaskCompleted() throws Exception
 	{
+		AirVideoExtension.LogDebug(TAG, "Enter onTaskComplete");
+		
 		String extractedURL = null;
 		ConnectToYouTubeResult result = null;
 
@@ -70,9 +72,11 @@ public class YouTubeExtractor implements OnTaskCompleted
 		}
 		
 		if(extractedURL == null)
-			context.dispatchStatusEventAsync("YOUTUBE_EXTRACTION_ERROR", "MediaURL is null");
+			context.dispatchStatusEventAsync(AirVideoExtensionContext.YOUTUBE_EXTRACTION_ERROR, "MediaURL is null");
 		else
 			context.playUrl(extractedURL);
+		
+		AirVideoExtension.LogDebug(TAG, "Exit onTaskComplete");
 	}
 	
 	private String doExtract( String content, int loopCount ) throws Exception 
@@ -195,7 +199,7 @@ public class YouTubeExtractor implements OnTaskCompleted
 	    	{
 				// Sends data back to AS3 as Event.
 	    		AirVideoExtension.LogWarning(TAG, "caught exception : " + e.toString());
-				context.dispatchStatusEventAsync("YOUTUBE_EXTRACTION_ERROR", e.toString());
+				context.dispatchStatusEventAsync(AirVideoExtensionContext.YOUTUBE_EXTRACTION_ERROR, e.toString());
 			}
 	    }
 	    
