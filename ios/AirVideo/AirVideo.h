@@ -17,15 +17,28 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 #import "FlashRuntimeExtensions.h"
-#import "AirYouTubeController.h"
+#import <MediaPlayer/MediaPlayer.h>
 
-extern FREContext AirVideoContext;
+@interface AirVideo : NSObject
+{
+    CGRect requestedFrame;
+}
+
+@property (nonatomic, readonly) MPMoviePlayerController *player;
+@property (nonatomic, assign) CGRect requestedFrame;
+
++ (id)sharedInstance;
+
++ (void)dispatchEvent:(NSString *)eventName withInfo:(NSString *)info;
++ (void)log:(NSString *)message;
+
+@end
+
 
 // C interface
 DEFINE_ANE_FUNCTION(airVideoShowPlayer);
 DEFINE_ANE_FUNCTION(airVideoDisposePlayer);
 DEFINE_ANE_FUNCTION(airVideoLoadVideo);
-DEFINE_ANE_FUNCTION(airVideoLoadYoutube);
 DEFINE_ANE_FUNCTION(airVideoResizeVideo);
 
 // ANE Setup

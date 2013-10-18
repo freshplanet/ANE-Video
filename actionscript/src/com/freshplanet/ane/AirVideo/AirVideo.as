@@ -18,14 +18,6 @@ package com.freshplanet.ane.AirVideo
 		/** Event dispatched each time the currently played video changes. */
 		public static const CURRENT_VIDEO_CHANGED : String = "CURRENT_VIDEO_CHANGED";
 		public static const VIDEO_PLAYBACK_ERROR  : String = "VIDEO_PLAYBACK_ERROR";
-		public static const YOUTUBE_EXTRACTION_ERROR : String = "YOUTUBE_EXTRACTION_ERROR";
-		public static const VIDEO_LOADED_EVENT : String = "VIDEO_LOADED_EVENT";
-		
-		private static const SHOW_VIDEO:String = "airVideoShowPlayer";
-		private static const HIDE_VIDEO:String = "airVideoHidePlayer";
-		private static const LOAD_VIDEO:String = "airVideoLoadVideo";
-		private static const LOAD_YOUTUBE:String = "airVideoLoadYoutube";
-		private static const RESIZE_VIDEO:String = "airVideoResizeVideo";
 		
 		/** AirVideo is supported on iOS and Android devices. */
 		public static function get isSupported() : Boolean
@@ -74,26 +66,24 @@ package com.freshplanet.ane.AirVideo
 			_logEnabled = value;
 		}
 		
-		/** Add the video player to the display list */
-		public function showPlayer():void
+		/** Add the video player to the display list, at the center of the stage. */
+		public function showPlayer() : void
 		{
-			if (!isSupported) 
-				return;
+			if (!isSupported) return;
 			
-			_context.call(SHOW_VIDEO);
+			_context.call("airVideoShowPlayer");
 		}
 		
 		/** Remove the video player from the display list. */
-		public function hidePlayer():void
+		public function hidePlayer() : void
 		{
-			if (!isSupported) 
-				return;
+			if (!isSupported) return;
 			
-			_context.call(HIDE_VIDEO);
+			_context.call("airVideoHidePlayer");
 		}
 		
 		/** Return the URL of the video being played currently, or <code>null</code> nothing is playing. */
-		public function get currentVideo():String
+		public function get currentVideo() : String
 		{
 			return _currentVideo ? _currentVideo.concat() : null;
 		}
@@ -107,38 +97,32 @@ package com.freshplanet.ane.AirVideo
 		 * @param url the url of the video.  it can be a local file on the device.
 		 * @param isLocalFile set this flag to true when playing a video stored locally, not on the web. 
 		 * default value is false
+		 * @param displayArea an area on the screen where the video will be displayed, measured from the top 
+		 * corner, in pixels.
 		 */
-		public function loadVideo(url:String, isLocalFile:Boolean = false):void
+		public function loadVideo( url : String, isLocalFile:Boolean = false, displayArea:Rectangle = null ) : void
 		{
-			if (!isSupported) 
-				return;
+			if (!isSupported) return;
 
-			_context.call(LOAD_VIDEO, url, isLocalFile);
+			if (displayArea)
+			{
+				_context.call("airVideoLoadVideo", url, isLocalFile, displayArea.x, displayArea.y, displayArea.width, displayArea.height);
+
+			} else _context.call("airVideoLoadVideo", url, isLocalFile);
 			setCurrentVideo(url);
 		}
 		
-		public function loadYoutubeVideo(id:String):void
+		public function resizeVideo(displayArea:Rectangle) : void
 		{
-			if (!isSupported) 
-				return;
-			
-			_context.call(LOAD_YOUTUBE, id);
-			setCurrentVideo(id);
-		}
-		
-		public function resizeVideo(displayArea:Rectangle):void
-		{
-			if (!isSupported) 
-				return;
-			
-			_context.call(RESIZE_VIDEO, displayArea.x, displayArea.y, displayArea.width, displayArea.height);
+			if (!isSupported) return;
+			_context.call("airVideoResizeVideo", displayArea.x, displayArea.y, displayArea.width, displayArea.height);
 		}
 		
 		/**
 		 * Return an array containing the URLs of the videos currently in the queue. The video currently
 		 * played is not part of the queue.
 		 */
-		public function get queue():Array
+		public function get queue() : Array
 		{
 			return _queue.concat();
 		}
@@ -148,20 +132,20 @@ package com.freshplanet.ane.AirVideo
 		 * 
 		 * If no video is currently played, and the queue is empty, the video is loaded and played directly.
 		 */
-		public function addVideoToQueue(url:String):void
+		public function addVideoToQueue( url : String ) : void
 		{
 			if (_currentVideo == null && _queue.length == 0) loadVideo(url);
 			else _queue.push(url);
 		}
 		
 		/** Remove all videos from the queue. This doesn't stop the video being played currently, if any. */
-		public function clearQueue():void
+		public function clearQueue() : void
 		{
 			_queue.splice(0);
 		}
 		
 		/** Stop the video being played currently, if any, and start the first video in the queue, if any. */
-		public function next():void
+		public function next() : void
 		{
 			if (_queue.length > 0)
 			{
@@ -188,7 +172,7 @@ package com.freshplanet.ane.AirVideo
 		private var _currentVideo : String;
 		private var _queue : Array = [];
 		
-		private function setCurrentVideo(url:String):void
+		private function setCurrentVideo( url : String ) : void
 		{
 			if (url != _currentVideo)
 			{
@@ -197,20 +181,25 @@ package com.freshplanet.ane.AirVideo
 			}
 		}
 		
-		private function onStatus(event:StatusEvent):void
+		private function onStatus( event : StatusEvent ) : void
 		{
 			if (event.code == "PLAYBACK_DID_FINISH")
+			{
 				next();
-			else if (event.code == "LOGGING")
+			}
+			else if (event.code == "PLAYBACK_ERROR")
+			{
+				dispatchEvent(new Event(VIDEO_PLAYBACK_ERROR));
+			}
+			else if (event.code == "LOGGING") // Simple log message
+			{
 				log(event.level);
-			else
-				dispatchEvent(new Event(event.code));
+			}
 		}
 		
-		private function log(message:String):void
+		private function log( message : String ) : void
 		{
-			if (_logEnabled) 
-				trace("[AirVideo] " + message);
+			if (_logEnabled) trace("[AirVideo] " + message);
 		}
 	}
 }

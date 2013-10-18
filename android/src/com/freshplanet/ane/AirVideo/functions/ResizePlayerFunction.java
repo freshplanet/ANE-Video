@@ -21,7 +21,7 @@ package com.freshplanet.ane.AirVideo.functions;
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
-import com.freshplanet.ane.AirVideo.AirVideoExtension;
+import com.freshplanet.ane.AirVideo.Extension;
 
 public class ResizePlayerFunction implements FREFunction
 {
@@ -45,7 +45,7 @@ public class ResizePlayerFunction implements FREFunction
 			return null;
 		}
 		
-		AirVideoExtension.context.setDisplayRect(x,y,width,height);
+		Extension.context.setDisplayRect(x,y,width,height);
 		return null;
 	}
 }
