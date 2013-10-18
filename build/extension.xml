@@ -31,8 +31,8 @@
    <platform name="Android-ARM"> 
         <applicationDeployment> 
             <nativeLibrary>libAirVideo.jar</nativeLibrary> 
-            <initializer>com.freshplanet.ane.AirVideo.AirVideoExtension</initializer> 
-            <finalizer>com.freshplanet.ane.AirVideo.AirVideoExtension</finalizer> 
+            <initializer>com.freshplanet.ane.AirVideo.Extension</initializer> 
+            <finalizer>com.freshplanet.ane.AirVideo.Extension</finalizer> 
         </applicationDeployment>
     </platform>
     

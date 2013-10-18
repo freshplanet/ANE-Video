@@ -184,7 +184,7 @@ package com.freshplanet.ane.AirVideo
 		private static var _instance : AirVideo;
 		
 		private var _context : ExtensionContext;
-		private var _logEnabled : Boolean = true;
+		private var _logEnabled : Boolean = false;
 		private var _currentVideo : String;
 		private var _queue : Array = [];
 		
