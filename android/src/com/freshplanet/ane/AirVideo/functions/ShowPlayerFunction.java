@@ -39,6 +39,9 @@ public class ShowPlayerFunction implements FREFunction
 		LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		params.gravity = Gravity.CENTER_HORIZONTAL;
 		rootContainer.addView(videoContainer, params);
+		
+		videoContainer.clearFocus();
+		
 		return null;
 	}
 }

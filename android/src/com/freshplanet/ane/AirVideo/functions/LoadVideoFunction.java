@@ -43,6 +43,7 @@ public class LoadVideoFunction implements FREFunction
 		
 		Extension.context.getVideoView().setVideoURI(Uri.parse(url));
 		Extension.context.getVideoView().start();
+		Extension.context.getVideoView().clearFocus();
 		
 		return null;
 	}
