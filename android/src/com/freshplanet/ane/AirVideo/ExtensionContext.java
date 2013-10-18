@@ -98,7 +98,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	@Override
 	public boolean onError(MediaPlayer mp, int what, int extra) 
 	{
-		dispatchStatusEventAsync("PLAYBACK_ERROR", "OK");
-		return false;
+		dispatchStatusEventAsync("VIDEO_PLAYBACK_ERROR", "OK");
+		return true;
 	}
 }

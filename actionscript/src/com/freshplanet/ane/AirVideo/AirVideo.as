@@ -184,17 +184,11 @@ package com.freshplanet.ane.AirVideo
 		private function onStatus( event : StatusEvent ) : void
 		{
 			if (event.code == "PLAYBACK_DID_FINISH")
-			{
 				next();
-			}
-			else if (event.code == "PLAYBACK_ERROR")
-			{
+			else if (event.code == "VIDEO_PLAYBACK_ERROR")
 				dispatchEvent(new Event(VIDEO_PLAYBACK_ERROR));
-			}
 			else if (event.code == "LOGGING") // Simple log message
-			{
 				log(event.level);
-			}
 		}
 		
 		private function log( message : String ) : void

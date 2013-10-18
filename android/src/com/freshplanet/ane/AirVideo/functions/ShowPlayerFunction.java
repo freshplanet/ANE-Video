@@ -37,7 +37,7 @@ public class ShowPlayerFunction implements FREFunction
 		VideoView videoContainer = Extension.context.getVideoView();
 		
 		LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		params.gravity = Gravity.CENTER;
+		params.gravity = Gravity.CENTER_HORIZONTAL;
 		rootContainer.addView(videoContainer, params);
 		return null;
 	}

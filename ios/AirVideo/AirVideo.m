@@ -157,6 +157,7 @@ static AirVideo *sharedInstance = nil;
     {
         NSError *playbackFinishedError = [notification.userInfo objectForKey:@"error"];
         [AirVideo log:[NSString stringWithFormat:@"playbackFinishedError.  Error: %@",playbackFinishedError]];
+        [AirVideo dispatchEvent:@"VIDEO_PLAYBACK_ERROR" withInfo:[playbackFinishedError localizedDescription]];
     }
     else
     {
