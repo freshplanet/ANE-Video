@@ -21,11 +21,14 @@ package com.freshplanet.ane.AirVideo;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.R.bool;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.view.ViewGroup;
-import android.widget.FrameLayout.LayoutParams;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -36,9 +39,15 @@ import com.freshplanet.ane.AirVideo.functions.LoadVideoFunction;
 import com.freshplanet.ane.AirVideo.functions.ResizePlayerFunction;
 import com.freshplanet.ane.AirVideo.functions.ShowPlayerFunction;
 
-public class ExtensionContext extends FREContext implements OnCompletionListener, OnErrorListener
+public class ExtensionContext extends FREContext implements OnCompletionListener, OnErrorListener, OnPreparedListener
 {
+	public final String TAG = "[AirVideo]";
 	private VideoView _videoView = null;
+	private int x = 0;
+	private int y = 0;
+	private int width = 0;
+	private int height = 0;
+	private boolean isDisplayRectSet = false;
 	
 	@Override
 	public void dispose() {}
@@ -74,6 +83,7 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 			_videoView.setMediaController(mediaController);
 			_videoView.setOnCompletionListener(this);
 			_videoView.setOnErrorListener(this);
+			_videoView.setOnPreparedListener(this);
 		}
 		
 		return _videoView;
@@ -81,13 +91,54 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	
 	public void setDisplayRect(double x, double y, double width, double height)
 	{
-		LayoutParams params = (LayoutParams)_videoView.getLayoutParams();
-		params.leftMargin = (int)x;
-		params.topMargin = (int)y;
-		params.width = (int)width;
-		params.height = (int)height;
+		this.x = (int) x;
+		this.y = (int) y;
+		this.width = (int) width;
+		this.height = (int) height;
+		isDisplayRectSet = true;
+		updateDisplayRect();
+	}
+	
+	private void updateDisplayRect() 
+	{
+		if(!isDisplayRectSet) {
+			return;
+		}
+		getVideoView();
+		ViewGroup.LayoutParams params = _videoView.getLayoutParams();
+		if(params == null) {
+			return;
+		}
+		
+		try {
+			FrameLayout.LayoutParams frameParams = (FrameLayout.LayoutParams) params;
+			frameParams.leftMargin = (int) x;
+			frameParams.topMargin = (int) y;
+		} catch (ClassCastException frameError) {
+			try {
+				WindowManager.LayoutParams windowParams = (WindowManager.LayoutParams) params;
+				windowParams.horizontalMargin = (int) x;
+				windowParams.verticalMargin = (int) y;
+			} catch (ClassCastException windowError) {
+				width += 2*x;
+				height += 2*y;
+			}
+		}
+		
+		params.width = width;
+		params.height = height;
+
 		_videoView.setLayoutParams(params);
 		_videoView.invalidate();
+	}
+	
+	@Override
+	public void onPrepared(MediaPlayer arg0) {
+		if(isDisplayRectSet) {
+			updateDisplayRect();
+		}
+		_videoView.start();
+		_videoView.clearFocus();
 	}
 	
 	public void onCompletion(MediaPlayer mp)
@@ -99,6 +150,9 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	public boolean onError(MediaPlayer mp, int what, int extra) 
 	{
 		dispatchStatusEventAsync("VIDEO_PLAYBACK_ERROR", "OK");
+		isDisplayRectSet = false;
 		return true;
 	}
+
+	
 }
