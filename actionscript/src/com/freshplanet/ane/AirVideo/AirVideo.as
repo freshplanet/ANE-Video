@@ -19,6 +19,11 @@ package com.freshplanet.ane.AirVideo
 		public static const CURRENT_VIDEO_CHANGED : String = "CURRENT_VIDEO_CHANGED";
 		public static const VIDEO_PLAYBACK_ERROR  : String = "VIDEO_PLAYBACK_ERROR";
 		
+		
+
+		/** Dispatched when there is enought data and the video starts playing*/
+		public static const PLAYBACK_START : String = "PLAYBACK_START";
+		
 		/** AirVideo is supported on iOS and Android devices. */
 		public static function get isSupported() : Boolean
 		{
@@ -187,6 +192,8 @@ package com.freshplanet.ane.AirVideo
 				next();
 			else if (event.code == "VIDEO_PLAYBACK_ERROR")
 				dispatchEvent(new Event(VIDEO_PLAYBACK_ERROR));
+			if (event.code == "PLAYBACK_CAN_START")
+				dispatchEvent(new Event(PLAYBACK_START));
 			else if (event.code == "LOGGING") // Simple log message
 				log(event.level);
 		}

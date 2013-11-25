@@ -112,6 +112,7 @@ static AirVideo *sharedInstance = nil;
     } else if (self.player.loadState == MPMovieLoadStatePlayable)
     {
         [AirVideo log:@"playerLoadStateDidChange = MPMovieLoadStatePlayable"];
+        [AirVideo dispatchEvent:@"PLAYBACK_CAN_START" withInfo:@"OK"];
     } else {
         [AirVideo log:[NSString stringWithFormat:@"playerLoadStateDidChange unknown state = %i", self.player.loadState]];
     }
