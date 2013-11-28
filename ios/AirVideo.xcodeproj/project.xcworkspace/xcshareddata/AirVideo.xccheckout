@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>668FBACE-343B-4E30-9E49-AD790763561B</string>
+	<key>IDESourceControlProjectName</key>
+	<string>AirVideo</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>CBC93CB1-6437-4E2F-8279-4EC0A7ADF749</key>
+		<string>ssh://github.com/freshplanet/ANE-Video.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ios/AirVideo.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>CBC93CB1-6437-4E2F-8279-4EC0A7ADF749</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/freshplanet/ANE-Video.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>CBC93CB1-6437-4E2F-8279-4EC0A7ADF749</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>CBC93CB1-6437-4E2F-8279-4EC0A7ADF749</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ANE-Video</string>
+		</dict>
+	</array>
+</dict>
+</plist>

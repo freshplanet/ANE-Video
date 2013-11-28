@@ -183,7 +183,7 @@ bool isRetina;
     for (NSString *url in urls) {
         NSLog(@"buffering for url %@", url);
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-        RequestDelegate *requestDelegate = [[[RequestDelegate alloc] initWithVideo:self forPosition:i] autorelease];
+        RequestDelegate *requestDelegate = [[[RequestDelegate alloc] initWithVideo:self andRequest:request forPosition:i] autorelease];
         [NSURLConnection connectionWithRequest:request delegate:requestDelegate];
         i++;
     }
