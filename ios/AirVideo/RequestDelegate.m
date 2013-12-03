@@ -19,8 +19,13 @@
     self.receivedData = [[NSMutableData data] retain];
     position = i;
     dl_start = NULL;
-    watchdog = [[NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(watchdogDidTrigger:) userInfo:Nil repeats:NO] retain];
+    connection = [[NSURLConnection connectionWithRequest:request delegate:self] retain];
     return self;
+}
+
+-(void)setWatchdogTo:(float) time
+{
+    watchdog = [[NSTimer scheduledTimerWithTimeInterval:time target:self selector:@selector(watchdogDidTrigger:) userInfo:Nil repeats:NO] retain];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
@@ -32,17 +37,6 @@
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
     
-    if( active_connection == nil ){
-        active_connection = [connection retain];
-        NSLog(@"%@ connection prevailed", (active_connection == secondary_connection)?@"Secondary":@"Primary");
-    }
-    
-    if( connection != active_connection )
-    {
-        [connection cancel];
-        return;
-    }
-    
     [receivedData appendData:data];
     
     if(watchdog != nil)
@@ -51,14 +45,6 @@
         [watchdog release];
         watchdog = nil;
     }
-    
-//    if( dl_start != NULL )
-//    {
-//        NSTimeInterval timeSinceDlStart = -[dl_start timeIntervalSinceNow];
-//        NSLog(@"bp:%d %f %f",[receivedData length], timeSinceDlStart, [receivedData length]/timeSinceDlStart);
-//        if( [receivedData length] > 10000 && [receivedData length]/timeSinceDlStart > 1000 )
-//            NSLog(@"slow download detected");
-//    }
     
 }
 
@@ -75,12 +61,11 @@
     }
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+- (void)connectionDidFinishLoading:(NSURLConnection *)_connection
 {
     [dl_start release];
-    if(secondary_connection != NULL) [secondary_connection release];
-    [active_connection release];
     // release the connection, and the data object
+    [connection release];
     [controller storeVideoData:receivedData atPosition:position];
 }
 
@@ -88,8 +73,10 @@
 {
     [watchdog release];
     watchdog = nil;
-    NSLog(@"Server Request took more than 1s to be treated, sending request again");
-    secondary_connection = [[NSURLConnection connectionWithRequest:request delegate:self] retain];
+    NSLog(@"Server Request reached time limit, sending request again");
+    [connection cancel];
+    [connection release];
+    connection = [[NSURLConnection connectionWithRequest:request delegate:self] retain];
 }
 
 

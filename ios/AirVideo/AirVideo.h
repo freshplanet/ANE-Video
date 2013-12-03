@@ -18,6 +18,7 @@
 
 #import "FlashRuntimeExtensions.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "FPANEUtils.h"
 
 @interface AirVideo : NSObject
 {

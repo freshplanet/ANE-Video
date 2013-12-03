@@ -22,6 +22,19 @@ public class BufferVideosFunction implements FREFunction
 	public FREObject call(FREContext context, FREObject[] args)
 	{
 		FREArray inputArray = (FREArray) args[0];
+		double watchdog = 0;
+		
+		try {
+			watchdog = args[1].getAsDouble();
+		} catch (IllegalStateException e1) {
+			e1.printStackTrace();
+		} catch (FRETypeMismatchException e1) {
+			e1.printStackTrace();
+		} catch (FREInvalidObjectException e1) {
+			e1.printStackTrace();
+		} catch (FREWrongThreadException e1) {
+			e1.printStackTrace();
+		}
 		
 		int len = 0 ;
 		
@@ -44,7 +57,7 @@ public class BufferVideosFunction implements FREFunction
 				url = inputArray.getObjectAt(i).getAsString();
 				outputArray[i] = url;
 				FetchVideoTask task = new FetchVideoTask();
-				task.setParams(i);
+				task.setParams(i,watchdog);
 				URL urlObject = new URL(url);
 				task.execute(urlObject);
 				

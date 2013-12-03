@@ -17,12 +17,11 @@
     NSMutableData* receivedData;
     NSDate* dl_start;
     NSTimer* watchdog;
-    NSURLConnection* active_connection;
-    NSURLConnection* secondary_connection;
+    NSURLConnection* connection;
 }
 
 -(id)initWithVideo:(AirVideo*)videoController andRequest:(NSURLRequest *)request forPosition:(int)i;
-
+-(void)setWatchdogTo:(float) time;
 
 @property(nonatomic, retain) AirVideo* controller;
 @property(nonatomic, retain) NSMutableData* receivedData;

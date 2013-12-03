@@ -96,14 +96,14 @@ package com.freshplanet.ane.AirVideo
 		 * 
 		 * @param videos: Array of url hosting mp4 videos
 		 * */
-		public function bufferVideos( videos:Array ):void
+		public function bufferVideos( videos:Array, watchDog:Number=0 ):void
 		{
 			if (!isSupported) 
 			{
 				_desktopVideo.bufferVideos(videos);
 			} else
 			{
-				_context.call("bufferVideos", videos);
+				_context.call("bufferVideos", videos, watchDog);
 			}
 			
 		}

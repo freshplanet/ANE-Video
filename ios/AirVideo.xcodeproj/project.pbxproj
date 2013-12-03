@@ -10,6 +10,8 @@
 		5A20D842171F9A7600498D01 /* RequestDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A20D840171F9A7600498D01 /* RequestDelegate.h */; };
 		5A20D843171F9A7600498D01 /* RequestDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A20D841171F9A7600498D01 /* RequestDelegate.m */; };
 		5A98569C15213BC3003A8EB0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A98569B15213BC3003A8EB0 /* Foundation.framework */; };
+		E2DC0C6B184E112100468D88 /* FPANEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = E2DC0C69184E112100468D88 /* FPANEUtils.h */; };
+		E2DC0C6C184E112100468D88 /* FPANEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E2DC0C6A184E112100468D88 /* FPANEUtils.m */; };
 		FA8DA7FE16A46CB200CE1D10 /* AirVideo-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = FA8DA7FB16A46CB200CE1D10 /* AirVideo-Prefix.pch */; };
 		FA8DA7FF16A46CB200CE1D10 /* AirVideo.h in Headers */ = {isa = PBXBuildFile; fileRef = FA8DA7FC16A46CB200CE1D10 /* AirVideo.h */; };
 		FA8DA80016A46CB200CE1D10 /* AirVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8DA7FD16A46CB200CE1D10 /* AirVideo.m */; };
@@ -23,6 +25,8 @@
 		5A20D841171F9A7600498D01 /* RequestDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestDelegate.m; sourceTree = "<group>"; };
 		5A98569815213BC3003A8EB0 /* libAirVideo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAirVideo.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A98569B15213BC3003A8EB0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		E2DC0C69184E112100468D88 /* FPANEUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPANEUtils.h; sourceTree = "<group>"; };
+		E2DC0C6A184E112100468D88 /* FPANEUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPANEUtils.m; sourceTree = "<group>"; };
 		FA8DA7FB16A46CB200CE1D10 /* AirVideo-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AirVideo-Prefix.pch"; sourceTree = "<group>"; };
 		FA8DA7FC16A46CB200CE1D10 /* AirVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirVideo.h; sourceTree = "<group>"; };
 		FA8DA7FD16A46CB200CE1D10 /* AirVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirVideo.m; sourceTree = "<group>"; };
@@ -87,6 +91,8 @@
 		FA8DA80516A46CFF00CE1D10 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E2DC0C69184E112100468D88 /* FPANEUtils.h */,
+				E2DC0C6A184E112100468D88 /* FPANEUtils.m */,
 				FA8DA7FB16A46CB200CE1D10 /* AirVideo-Prefix.pch */,
 				FA8DA80616A46D4500CE1D10 /* FlashRuntimeExtensions.h */,
 			);
@@ -104,6 +110,7 @@
 				FA8DA7FF16A46CB200CE1D10 /* AirVideo.h in Headers */,
 				FA8DA80716A46D4500CE1D10 /* FlashRuntimeExtensions.h in Headers */,
 				5A20D842171F9A7600498D01 /* RequestDelegate.h in Headers */,
+				E2DC0C6B184E112100468D88 /* FPANEUtils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,6 +164,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2DC0C6C184E112100468D88 /* FPANEUtils.m in Sources */,
 				FA8DA80016A46CB200CE1D10 /* AirVideo.m in Sources */,
 				5A20D843171F9A7600498D01 /* RequestDelegate.m in Sources */,
 			);

@@ -27,7 +27,7 @@ FREContext AirVideoCtx = nil;
 - (void)playerPlaybackDidFinish:(NSNotification *)notification;
 - (void)playerMovieReadyForDisplay:(NSNotification*)notification;
 - (void)resizeVideo;
-- (void)startBuffering:(NSArray*)urls;
+- (void)startBuffering:(NSArray*)urls withWatchdog:(float)time;
 - (void)pauseVideo;
 - (void)resume:(int)playBackTime;
 - (void)cleanUp;
@@ -175,7 +175,7 @@ bool isRetina;
     }
 }
 
--(void)startBuffering:(NSArray*)urls
+-(void)startBuffering:(NSArray*)urls withWatchdog:(float)time
 {
     NSLog(@"Start Buffering");
     NSInteger i = 0;
@@ -184,7 +184,7 @@ bool isRetina;
         NSLog(@"buffering for url %@", url);
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
         RequestDelegate *requestDelegate = [[[RequestDelegate alloc] initWithVideo:self andRequest:request forPosition:i] autorelease];
-        [NSURLConnection connectionWithRequest:request delegate:requestDelegate];
+        if (time > 0) [requestDelegate setWatchdogTo:time];
         i++;
     }
 }
@@ -389,14 +389,7 @@ DEFINE_ANE_FUNCTION(fetchVideo)
 {
     NSLog(@"[fetchVideo]");
     
-    uint32_t stringLength;
-    
-    NSString *url = nil;
-    const uint8_t *urlString;
-    if (FREGetObjectAsUTF8(argv[0], &stringLength, &urlString) == FRE_OK)
-    {
-        url = [NSString stringWithUTF8String:(const char *)urlString];
-    }
+    NSString *url = FPANE_FREObjectToNSString(argv[0]);
 
     if (url)
     {
@@ -462,29 +455,13 @@ DEFINE_ANE_FUNCTION(pauseCurrentVideo)
 
 DEFINE_ANE_FUNCTION(bufferVideos)
 {
-    FREObject arr = argv[0]; // array
-    uint32_t arr_len; // array length
-    FREGetArrayLength(arr, &arr_len);
-    NSMutableArray *urls = [NSMutableArray array];
-    for(int32_t i=0; i< arr_len;i++){
-        
-        FREObject element;
-        FREGetArrayElementAt(arr, i, &element);
-        
-        NSString *url = nil;
-        const uint8_t *urlString;
-        if (FREGetObjectAsUTF8(element, &arr_len, &urlString) == FRE_OK)
-        {
-            url = [NSString stringWithUTF8String:(const char *)urlString];
-        }
-        
-        if (url)
-        {
-            [urls addObject:url];
-        }
-    }
-
-    [[AirVideo sharedInstance] startBuffering:urls];
+    
+    NSArray* urls = FPANE_FREObjectToNSArrayOfNSString(argv[0]);
+    double time = 0;
+    if(FREGetObjectAsDouble(argv[1], &time) != FRE_OK)
+        NSLog(@"Couldn't parse watchdog time");
+    
+    [[AirVideo sharedInstance] startBuffering:urls withWatchdog:time];
     
     return nil;
 }
