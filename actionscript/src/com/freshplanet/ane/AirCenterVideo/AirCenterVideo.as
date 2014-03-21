@@ -1,4 +1,4 @@
-package com.freshplanet.ane.AirVideo
+package com.freshplanet.ane.AirCenterVideo
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -7,7 +7,7 @@ package com.freshplanet.ane.AirVideo
 	import flash.geom.Rectangle;
 	import flash.system.Capabilities;
 
-	public class AirVideo extends EventDispatcher
+	public class AirCenterVideo extends EventDispatcher
 	{
 		// --------------------------------------------------------------------------------------//
 		//																						 //
@@ -27,7 +27,7 @@ package com.freshplanet.ane.AirVideo
 			return isIOS || isAndroid;
 		}
 		
-		public function AirVideo()
+		public function AirCenterVideo()
 		{
 			if (!_instance)
 			{
@@ -47,9 +47,9 @@ package com.freshplanet.ane.AirVideo
 			}
 		}
 		
-		public static function getInstance() : AirVideo
+		public static function getInstance() : AirCenterVideo
 		{
-			return _instance ? _instance : new AirVideo();
+			return _instance ? _instance : new AirCenterVideo();
 		}
 		
 		/**
@@ -71,7 +71,7 @@ package com.freshplanet.ane.AirVideo
 		{
 			if (!isSupported) return;
 			
-			_context.call("airVideoShowPlayer");
+			_context.call("airCenterVideoShowPlayer");
 		}
 		
 		/** Remove the video player from the display list. */
@@ -79,7 +79,7 @@ package com.freshplanet.ane.AirVideo
 		{
 			if (!isSupported) return;
 			
-			_context.call("airVideoHidePlayer");
+			_context.call("airCenterVideoHidePlayer");
 		}
 		
 		/** Return the URL of the video being played currently, or <code>null</code> nothing is playing. */
@@ -106,16 +106,16 @@ package com.freshplanet.ane.AirVideo
 
 			if (displayArea)
 			{
-				_context.call("airVideoLoadVideo", url, isLocalFile, displayArea.x, displayArea.y, displayArea.width, displayArea.height);
+				_context.call("airCenterVideoLoadVideo", url, isLocalFile, displayArea.x, displayArea.y, displayArea.width, displayArea.height);
 
-			} else _context.call("airVideoLoadVideo", url, isLocalFile);
+			} else _context.call("airCenterVideoLoadVideo", url, isLocalFile);
 			setCurrentVideo(url);
 		}
 		
 		public function resizeVideo(displayArea:Rectangle) : void
 		{
 			if (!isSupported) return;
-			_context.call("airVideoResizeVideo", displayArea.x, displayArea.y, displayArea.width, displayArea.height);
+			_context.call("airCenterVideoResizeVideo", displayArea.x, displayArea.y, displayArea.width, displayArea.height);
 		}
 		
 		/**
@@ -163,9 +163,9 @@ package com.freshplanet.ane.AirVideo
 		// 																						 //
 		// --------------------------------------------------------------------------------------//
 		
-		private static const EXTENSION_ID : String = "com.freshplanet.AirVideo";
+		private static const EXTENSION_ID : String = "com.freshplanet.AirCenterVideo";
 		
-		private static var _instance : AirVideo;
+		private static var _instance : AirCenterVideo;
 		
 		private var _context : ExtensionContext;
 		private var _logEnabled : Boolean = false;
@@ -193,7 +193,7 @@ package com.freshplanet.ane.AirVideo
 		
 		private function log( message : String ) : void
 		{
-			if (_logEnabled) trace("[AirVideo] " + message);
+			if (_logEnabled) trace("[AirCenterVideo] " + message);
 		}
 	}
 }

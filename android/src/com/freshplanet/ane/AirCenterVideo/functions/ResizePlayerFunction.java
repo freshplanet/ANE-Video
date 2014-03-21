@@ -16,25 +16,36 @@
 //  
 //////////////////////////////////////////////////////////////////////////////////////
 
-package com.freshplanet.ane.AirVideo.functions;
-
-import android.view.ViewGroup;
-import android.widget.VideoView;
+package com.freshplanet.ane.AirCenterVideo.functions;
 
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
-import com.freshplanet.ane.AirVideo.Extension;
+import com.freshplanet.ane.AirCenterVideo.Extension;
 
-public class HidePlayerFunction implements FREFunction
+public class ResizePlayerFunction implements FREFunction
 {
 	@Override
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		ViewGroup rootContainer = Extension.context.getRootContainer();
-		VideoView videoContainer = Extension.context.getVideoView();
-		rootContainer.removeView(videoContainer);
+		double x = 0;
+		double y = 0;
+		double width = 0;
+		double height = 0;
+		try
+		{
+			x = args[0].getAsDouble();
+			y = args[1].getAsDouble();
+			width = args[2].getAsDouble();
+			height = args[3].getAsDouble();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 		
+		Extension.context.setDisplayRect(x,y,width,height);
 		return null;
 	}
 }

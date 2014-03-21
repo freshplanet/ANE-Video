@@ -16,33 +16,33 @@
 //  
 //////////////////////////////////////////////////////////////////////////////////////
 
-package com.freshplanet.ane.AirVideo;
+package com.freshplanet.ane.AirCenterVideo.functions;
+
+import android.net.Uri;
 
 import com.adobe.fre.FREContext;
-import com.adobe.fre.FREExtension;
+import com.adobe.fre.FREFunction;
+import com.adobe.fre.FREObject;
+import com.freshplanet.ane.AirCenterVideo.Extension;
 
-public class Extension implements FREExtension
+public class LoadVideoFunction implements FREFunction
 {
-	public static ExtensionContext context;
-	
 	@Override
-	public FREContext createContext(String arg0)
+	public FREObject call(FREContext context, FREObject[] args)
 	{
-		context = new ExtensionContext();
-		return context;
-	}
-
-	@Override
-	public void dispose()
-	{
-		context = null;
-	}
-
-	@Override
-	public void initialize() { }
-	
-	public static void log(String message)
-	{
-		context.dispatchStatusEventAsync("LOGGING", message);
+		String url = null;
+		try
+		{
+			url = args[0].getAsString();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+		
+		Extension.context.getVideoView().setVideoURI(Uri.parse(url));
+		
+		return null;
 	}
 }

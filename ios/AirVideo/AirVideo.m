@@ -19,9 +19,9 @@
 
 #import "AirVideo.h"
 
-FREContext AirVideoCtx = nil;
+FREContext AirCenterVideoCtx = nil;
 
-@interface AirVideo ()
+@interface AirCenterVideo ()
 
 - (void)resize;
 - (void)playerLoadStateDidChange:(NSNotification *)notification;
@@ -29,16 +29,16 @@ FREContext AirVideoCtx = nil;
 
 @end
 
-@implementation AirVideo
+@implementation AirCenterVideo
 
 @synthesize player = _player;
 @synthesize requestedFrame = CGRectNull;
 
 #pragma mark - Singleton
 
-static AirVideo *sharedInstance = nil;
+static AirCenterVideo *sharedInstance = nil;
 
-+ (AirVideo *)sharedInstance
++ (AirCenterVideo *)sharedInstance
 {
     if (sharedInstance == nil)
     {
@@ -87,33 +87,33 @@ static AirVideo *sharedInstance = nil;
 
 + (void)dispatchEvent:(NSString *)eventName withInfo:(NSString *)info
 {
-    if (AirVideoCtx != nil)
+    if (AirCenterVideoCtx != nil)
     {
-        FREDispatchStatusEventAsync(AirVideoCtx, (const uint8_t *)[eventName UTF8String], (const uint8_t *)[info UTF8String]);
+        FREDispatchStatusEventAsync(AirCenterVideoCtx, (const uint8_t *)[eventName UTF8String], (const uint8_t *)[info UTF8String]);
     }
 }
 
 + (void)log:(NSString *)message
 {
-    [AirVideo dispatchEvent:@"LOGGING" withInfo:message];
+    [AirCenterVideo dispatchEvent:@"LOGGING" withInfo:message];
 }
 
 - (void)playerLoadStateDidChange:(NSNotification *)notification
 {
     if (self.player.loadState == MPMovieLoadStateUnknown)
     {
-        [AirVideo log:@"playerLoadStateDidChange = MPMovieLoadStateUnknown"];
+        [AirCenterVideo log:@"playerLoadStateDidChange = MPMovieLoadStateUnknown"];
     } else if (self.player.loadState == MPMovieLoadStatePlaythroughOK)
     {
-        [AirVideo log:@"playerLoadStateDidChange = MPMovieLoadStatePlaythroughOK"];
+        [AirCenterVideo log:@"playerLoadStateDidChange = MPMovieLoadStatePlaythroughOK"];
     } else if (self.player.loadState == MPMovieLoadStateStalled)
     {
-        [AirVideo log:@"playerLoadStateDidChange = MPMovieLoadStateStalled"];
+        [AirCenterVideo log:@"playerLoadStateDidChange = MPMovieLoadStateStalled"];
     } else if (self.player.loadState == MPMovieLoadStatePlayable)
     {
-        [AirVideo log:@"playerLoadStateDidChange = MPMovieLoadStatePlayable"];
+        [AirCenterVideo log:@"playerLoadStateDidChange = MPMovieLoadStatePlayable"];
     } else {
-        [AirVideo log:[NSString stringWithFormat:@"playerLoadStateDidChange unknown state = %i", self.player.loadState]];
+        [AirCenterVideo log:[NSString stringWithFormat:@"playerLoadStateDidChange unknown state = %i", self.player.loadState]];
     }
     
     if (self.player.loadState == (MPMovieLoadStatePlayable | MPMovieLoadStatePlaythroughOK) || self.player.loadState == MPMovieLoadStatePlayable || self.player.loadState == MPMovieLoadStatePlaythroughOK)
@@ -156,12 +156,12 @@ static AirVideo *sharedInstance = nil;
     if ([notification.userInfo objectForKey:@"error"] != nil)
     {
         NSError *playbackFinishedError = [notification.userInfo objectForKey:@"error"];
-        [AirVideo log:[NSString stringWithFormat:@"playbackFinishedError.  Error: %@",playbackFinishedError]];
-        [AirVideo dispatchEvent:@"VIDEO_PLAYBACK_ERROR" withInfo:[playbackFinishedError localizedDescription]];
+        [AirCenterVideo log:[NSString stringWithFormat:@"playbackFinishedError.  Error: %@",playbackFinishedError]];
+        [AirCenterVideo dispatchEvent:@"VIDEO_PLAYBACK_ERROR" withInfo:[playbackFinishedError localizedDescription]];
     }
     else
     {
-        [AirVideo dispatchEvent:@"PLAYBACK_DID_FINISH" withInfo:@"OK"];
+        [AirCenterVideo dispatchEvent:@"PLAYBACK_DID_FINISH" withInfo:@"OK"];
     }
 }
 
@@ -173,16 +173,16 @@ static AirVideo *sharedInstance = nil;
 DEFINE_ANE_FUNCTION(airVideoShowPlayer)
 {
     UIView *rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
-    [rootView addSubview:[[[AirVideo sharedInstance] player] view]];
+    [rootView addSubview:[[[AirCenterVideo sharedInstance] player] view]];
     
     return nil;
 }
 
 DEFINE_ANE_FUNCTION(airVideoDisposePlayer)
 {
-    [[[AirVideo sharedInstance] player] stop];
-    [[AirVideo sharedInstance] player].fullscreen = false;
-    [[[[AirVideo sharedInstance] player] view] removeFromSuperview];
+    [[[AirCenterVideo sharedInstance] player] stop];
+    [[AirCenterVideo sharedInstance] player].fullscreen = false;
+    [[[[AirCenterVideo sharedInstance] player] view] removeFromSuperview];
     
     return nil;
 }
@@ -218,10 +218,10 @@ DEFINE_ANE_FUNCTION(airVideoResizeVideo)
         NSLog(@"couldnt parse number");
         return nil;
     }
-    [[AirVideo sharedInstance] setRequestedFrame:CGRectMake(x, y, w, h)];
-    NSLog(@"will resize video to %@", NSStringFromCGRect([[AirVideo sharedInstance]requestedFrame]));
+    [[AirCenterVideo sharedInstance] setRequestedFrame:CGRectMake(x, y, w, h)];
+    NSLog(@"will resize video to %@", NSStringFromCGRect([[AirCenterVideo sharedInstance]requestedFrame]));
     
-    [[AirVideo sharedInstance] resize];
+    [[AirCenterVideo sharedInstance] resize];
     
     return nil;
 }
@@ -274,10 +274,10 @@ DEFINE_ANE_FUNCTION(airVideoLoadVideo)
             NSLog(@"couldnt parse number");
             return nil;
         }
-        [[AirVideo sharedInstance] setRequestedFrame:CGRectMake(x, y, w, h)];
-        NSLog(@"will resize video to %@", NSStringFromCGRect([[AirVideo sharedInstance]requestedFrame]));
+        [[AirCenterVideo sharedInstance] setRequestedFrame:CGRectMake(x, y, w, h)];
+        NSLog(@"will resize video to %@", NSStringFromCGRect([[AirCenterVideo sharedInstance]requestedFrame]));
     } else {
-        [[AirVideo sharedInstance] setRequestedFrame:CGRectNull];
+        [[AirCenterVideo sharedInstance] setRequestedFrame:CGRectNull];
     }
     
     NSLog(@"loadVideo path = %@, isLocalFile = %c", path, isLocalFile);
@@ -290,7 +290,7 @@ DEFINE_ANE_FUNCTION(airVideoLoadVideo)
             NSError *unreachableError;
             if ( [url checkResourceIsReachableAndReturnError:&unreachableError] == NO )
             {
-                [AirVideo log:[NSString stringWithFormat:@"FileUnreachableError. Error: %@",unreachableError]];
+                [AirCenterVideo log:[NSString stringWithFormat:@"FileUnreachableError. Error: %@",unreachableError]];
                 NSLog(@"FileUnreachableError. Error: %@",unreachableError.localizedDescription);
                 NSLog(@"Exiting loadVideo");
                 return nil;
@@ -299,15 +299,15 @@ DEFINE_ANE_FUNCTION(airVideoLoadVideo)
         else {
             url = [NSURL URLWithString:path];
         }
-        [[[AirVideo sharedInstance] player] setContentURL:url];
-        [[[AirVideo sharedInstance] player] play];
+        [[[AirCenterVideo sharedInstance] player] setContentURL:url];
+        [[[AirCenterVideo sharedInstance] player] play];
     }
     
     NSLog(@"Exiting airVideoLoadVideo");
     return nil;
 }
 
-void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,
+void AirCenterVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,
                         uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet) 
 {
     // Register the links btwn AS3 and ObjC. (dont forget to modify the nbFuntionsToLink integer if you are adding/removing functions)
@@ -316,34 +316,34 @@ void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * nbFuntionsToLink);
     
-    func[0].name = (const uint8_t*) "airVideoShowPlayer";
+    func[0].name = (const uint8_t*) "airCenterVideoShowPlayer";
     func[0].functionData = NULL;
     func[0].function = &airVideoShowPlayer;
     
-    func[1].name = (const uint8_t*) "airVideoHidePlayer";
+    func[1].name = (const uint8_t*) "airCenterVideoHidePlayer";
     func[1].functionData = NULL;
     func[1].function = &airVideoDisposePlayer;
     
-    func[2].name = (const uint8_t*) "airVideoLoadVideo";
+    func[2].name = (const uint8_t*) "airCenterVideoLoadVideo";
     func[2].functionData = NULL;
     func[2].function = &airVideoLoadVideo;
     
-    func[3].name = (const uint8_t*) "airVideoResizeVideo";
+    func[3].name = (const uint8_t*) "airCenterVideoResizeVideo";
     func[3].functionData = NULL;
     func[3].function = &airVideoResizeVideo;
     
     *functionsToSet = func;
     
-    AirVideoCtx = ctx;
+    AirCenterVideoCtx = ctx;
 }
 
-void AirVideoContextFinalizer(FREContext ctx) { }
+void AirCenterVideoContextFinalizer(FREContext ctx) { }
 
-void AirVideoInitializer(void** extDataToSet, FREContextInitializer* ctxInitializerToSet, FREContextFinalizer* ctxFinalizerToSet)
+void AirCenterVideoInitializer(void** extDataToSet, FREContextInitializer* ctxInitializerToSet, FREContextFinalizer* ctxFinalizerToSet)
 {
 	*extDataToSet = NULL;
-	*ctxInitializerToSet = &AirVideoContextInitializer;
-	*ctxFinalizerToSet = &AirVideoContextFinalizer;
+	*ctxInitializerToSet = &AirCenterVideoContextInitializer;
+	*ctxFinalizerToSet = &AirCenterVideoContextFinalizer;
 }
 
-void AirVideoFinalizer(void *extData) { }
+void AirCenterVideoFinalizer(void *extData) { }

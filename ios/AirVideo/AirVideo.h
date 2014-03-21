@@ -19,7 +19,7 @@
 #import "FlashRuntimeExtensions.h"
 #import <MediaPlayer/MediaPlayer.h>
 
-@interface AirVideo : NSObject
+@interface AirCenterVideo : NSObject
 {
     CGRect requestedFrame;
 }
@@ -42,7 +42,7 @@ DEFINE_ANE_FUNCTION(airVideoLoadVideo);
 DEFINE_ANE_FUNCTION(airVideoResizeVideo);
 
 // ANE Setup
-void AirVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet);
-void AirVideoContextFinalizer(FREContext ctx);
-void AirVideoInitializer(void** extDataToSet, FREContextInitializer* ctxInitializerToSet, FREContextFinalizer* ctxFinalizerToSet);
-void AirVideoFinalizer(void *extData);
+void AirCenterVideoContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet);
+void AirCenterVideoContextFinalizer(FREContext ctx);
+void AirCenterVideoInitializer(void** extDataToSet, FREContextInitializer* ctxInitializerToSet, FREContextFinalizer* ctxFinalizerToSet);
+void AirCenterVideoFinalizer(void *extData);

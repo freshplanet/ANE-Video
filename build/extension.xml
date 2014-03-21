@@ -17,22 +17,22 @@
 //////////////////////////////////////////////////////////////////////////////////////-->
 
 <extension xmlns="http://ns.adobe.com/air/extension/3.1">
-  <id>com.freshplanet.AirVideo</id>
+  <id>com.freshplanet.AirCenterVideo</id>
   <versionNumber>1.0</versionNumber>
   <platforms>
     <platform name="iPhone-ARM">
             <applicationDeployment>
                 <nativeLibrary>libAirVideo.a</nativeLibrary>
-                <initializer>AirVideoInitializer</initializer> 
-                <finalizer>AirVideoFinalizer</finalizer>
+                <initializer>AirCenterVideoInitializer</initializer> 
+                <finalizer>AirCenterVideoFinalizer</finalizer>
             </applicationDeployment>
     </platform>
  
    <platform name="Android-ARM"> 
         <applicationDeployment> 
             <nativeLibrary>libAirVideo.jar</nativeLibrary> 
-            <initializer>com.freshplanet.ane.AirVideo.Extension</initializer> 
-            <finalizer>com.freshplanet.ane.AirVideo.Extension</finalizer> 
+            <initializer>com.freshplanet.ane.AirCenterVideo.Extension</initializer> 
+            <finalizer>com.freshplanet.ane.AirCenterVideo.Extension</finalizer> 
         </applicationDeployment>
     </platform>
     

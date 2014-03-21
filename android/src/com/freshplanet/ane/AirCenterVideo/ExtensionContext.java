@@ -16,7 +16,7 @@
 //  
 //////////////////////////////////////////////////////////////////////////////////////
 
-package com.freshplanet.ane.AirVideo;
+package com.freshplanet.ane.AirCenterVideo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,10 +34,10 @@ import android.widget.VideoView;
 
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
-import com.freshplanet.ane.AirVideo.functions.HidePlayerFunction;
-import com.freshplanet.ane.AirVideo.functions.LoadVideoFunction;
-import com.freshplanet.ane.AirVideo.functions.ResizePlayerFunction;
-import com.freshplanet.ane.AirVideo.functions.ShowPlayerFunction;
+import com.freshplanet.ane.AirCenterVideo.functions.HidePlayerFunction;
+import com.freshplanet.ane.AirCenterVideo.functions.LoadVideoFunction;
+import com.freshplanet.ane.AirCenterVideo.functions.ResizePlayerFunction;
+import com.freshplanet.ane.AirCenterVideo.functions.ShowPlayerFunction;
 
 public class ExtensionContext extends FREContext implements OnCompletionListener, OnErrorListener, OnPreparedListener
 {
@@ -57,10 +57,10 @@ public class ExtensionContext extends FREContext implements OnCompletionListener
 	{
 		Map<String, FREFunction> functions = new HashMap<String, FREFunction>();
 		
-		functions.put("airVideoShowPlayer", new ShowPlayerFunction());
-		functions.put("airVideoHidePlayer", new HidePlayerFunction());
-		functions.put("airVideoLoadVideo", new LoadVideoFunction());
-		functions.put("airVideoResizeVideo", new ResizePlayerFunction());
+		functions.put("airCenterVideoShowPlayer", new ShowPlayerFunction());
+		functions.put("airCenterVideoHidePlayer", new HidePlayerFunction());
+		functions.put("airCenterVideoLoadVideo", new LoadVideoFunction());
+		functions.put("airCenterVideoResizeVideo", new ResizePlayerFunction());
 		
 		return functions;
 	}
