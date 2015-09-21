@@ -10,29 +10,29 @@
 	<string>AirVideo</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>AABE0573-745B-4C5D-AE7B-B872506D8729</key>
+		<key>3952FD7912224F5A9187AF9540D679390D7E9E87</key>
 		<string>https://github.com/freshplanet/ANE-Video.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>ios/AirVideo.xcodeproj/project.xcworkspace</string>
+	<string>ios/AirVideo.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>AABE0573-745B-4C5D-AE7B-B872506D8729</key>
+		<key>3952FD7912224F5A9187AF9540D679390D7E9E87</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/freshplanet/ANE-Video.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>AABE0573-745B-4C5D-AE7B-B872506D8729</string>
+	<string>3952FD7912224F5A9187AF9540D679390D7E9E87</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>AABE0573-745B-4C5D-AE7B-B872506D8729</string>
+			<string>3952FD7912224F5A9187AF9540D679390D7E9E87</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ANE-Video</string>
 		</dict>
