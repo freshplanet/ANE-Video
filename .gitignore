@@ -33,3 +33,7 @@ Thumbs.db
 test/bin-debug
 test/xcode-launcher
 videos.txt
+
+# intellij
+*.iml
+*.idea
